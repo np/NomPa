@@ -43,7 +43,7 @@ module CmpAny (Env : (α β : World) → Set)
   cmpAny _ tt        tt        = true
   cmpAny _ _         _         = false
 
-open CmpAny (|Cmp| Name) id extendNameCmp public
+open CmpAny (Cmp° Name) id extendNameCmp public
 
 _==Any_ : ∀ {α} → Any α → Any α → Bool
 _==Any_ = cmpAny _==ᴺ_

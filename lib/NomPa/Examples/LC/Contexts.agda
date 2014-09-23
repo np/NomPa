@@ -84,7 +84,7 @@ plug : ∀ {α β} → Cx α β → Tm β → Tm α
 plug []      t = t
 plug (s ∷ c) t = defocusᶠ s (plug c t)
 
-cmap : ∀ {α β} → (Cx α |↦| Cx β) → CxTm α → CxTm β
+cmap : ∀ {α β} → (Cx α ↦° Cx β) → CxTm α → CxTm β
 cmap f (_ , c , t) = (_ , f c , t)
 
 hole : ∀ {α} → Tm α → CxTm α

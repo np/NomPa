@@ -51,21 +51,21 @@ Substø : (F G : World → Set) → Set
 Substø F G = ∀ {α} → (Name α → G ø) → F α → G ø
 
 SubstCø : (F G : World → Set) → Set
-SubstCø F G = ∀ {α} → (Name α → |∀| G) → F α → G ø
+SubstCø F G = ∀ {α} → (Name α → ∀° G) → F α → G ø
 
 SubstCᴮ : (F G : World → Set) → Set
-SubstCᴮ F G = ∀ {α} b → Supply α → |∀| G → F (b ◅ α) → G α
+SubstCᴮ F G = ∀ {α} b → Supply α → ∀° G → F (b ◅ α) → G α
 
 SubstCøᴮ : (F G : World → Set) → Set
-SubstCøᴮ F G = ∀ b → |∀| G → F (b ◅ ø) → G ø
+SubstCøᴮ F G = ∀ b → ∀° G → F (b ◅ ø) → G ø
 
--- Substø/C F G = ∀ {α} → (Name α → G ø) → F α → |∀| G
+-- Substø/C F G = ∀ {α} → (Name α → G ø) → F α → ∀° G
 
 SubstC? : (F G : World → Set) → Set
-SubstC? F G = ∀ {α} → (Name α →? |∀| G) → F α → G α
+SubstC? F G = ∀ {α} → (Name α →? ∀° G) → F α → G α
 
 SubstC : (F G : World → Set) → Set
-SubstC F G = ∀ {α β} → Supply β → (Name α → Name β ⊎ |∀| G) → F α → G β
+SubstC F G = ∀ {α β} → Supply β → (Name α → Name β ⊎ ∀° G) → F α → G β
 
 Shift : (F G : World → Set) → Set
 Shift F G = ∀ {α β} k → (α +ᵂ k) ⊆ β → F α → G β
@@ -101,7 +101,7 @@ coerceKit = mk coerceᴺ (const id) ⊆-◅
 ≡-kit : TrKit _≡_ Name
 ≡-kit = mk (≡.subst Name) (const id) (λ b → ≡.cong (_◅_ b))
 
-mapKit : ∀ {Env F G} (f : Name |↦| Name) (g : F |↦| G)
+mapKit : ∀ {Env F G} (f : Name ↦° Name) (g : F ↦° G)
          → TrKit Env F → TrKit Env G
 mapKit f g kit = mk (λ Δ → g ∘ trName Δ ∘ f) trBinder extEnv
   where open TrKit kit
@@ -207,7 +207,7 @@ renameKit+⊆ β₀ = mk trName trBinder extEnv
        (TrKit.extEnv renameKit b ren , ⊆-trans pf (SubstEnv.seed⊆ ren))
 
 substKit : ∀ {F}
-             (V      : Name |↦| F)
+             (V      : Name ↦° F)
              (coerce : Coerce F F)
            → TrKit (SubstEnv F) F
 substKit {F} V coerce = mk SubstEnv.trName SubstEnv.trBinder extEnv
@@ -228,7 +228,7 @@ record SubstC?Env (F : World → Set) (α β : World) : Set where
   trBinder : Binder → Binder
   trBinder = id
 
-substC?Kit : ∀ {F} (V : Name |↦| F)
+substC?Kit : ∀ {F} (V : Name ↦° F)
              → TrKit (SubstC?Env F) F
 substC?Kit {F} V = mk trName SubstC?Env.trBinder extEnv
   where
@@ -239,9 +239,9 @@ substC?Kit {F} V = mk trName SubstC?Env.trBinder extEnv
     extEnv b (≡.refl , trName?) = ≡.refl , exportWith nothing trName?
 
 SubstCEnv : (F : World → Set) → EnvType
-SubstCEnv F = SubstEnv (λ β → Name β ⊎ |∀| F)
+SubstCEnv F = SubstEnv (λ β → Name β ⊎ ∀° F)
 
-substCKit : ∀ {F} (V : Name |↦| F)
+substCKit : ∀ {F} (V : Name ↦° F)
              → TrKit (SubstCEnv F) F
 substCKit {F} V = mk trName SubstEnv.trBinder extEnv
   where
@@ -369,7 +369,7 @@ module RenameAᴸ {E : Set → Set} (E-app : Applicative E) where
 open RenameAᴸ public using () renaming (kitᴸ to renameAKitᴸ)
 
 module Substᴸ {F : Binder → World → Set}
-              (V : ∀ {b} → Name |↦| F b)
+              (V : ∀ {b} → Name ↦° F b)
               (importF : ∀ {b α} → b # α → F b α → F (sucᴮ b) (b ◅ α)) where
   Envᴸ = SubstEnvᴸ F
 
@@ -441,7 +441,7 @@ module RenameAGen {F G} (renameA : RenameA F G) where
   rename = renameA id-app
 
   rename? : Rename? F G
-  rename? = renameA Maybe.applicative
+  rename? = renameA (Maybe.applicative _)
 
   open Rename?Gen rename? public
 
@@ -486,7 +486,7 @@ module TraverseAFGNameGen {F G} (traverseAFGName : TraverseA F G Name) where
 --    * the height is an approximation of the number of binders between
 --      the root and a variable.
 --    * assuming world erasing is performed
-module SubstCGen {F G} (V : Name |↦| G) (traverseFGG : Traverse F G G) where
+module SubstCGen {F G} (V : Name ↦° G) (traverseFGG : Traverse F G G) where
   substC : SubstC F G
   substC supply f = traverseFGG (substCKit V) (f , supply)
 
@@ -506,14 +506,14 @@ module SubstCGen {F G} (V : Name |↦| G) (traverseFGG : Traverse F G G) where
   substName : ∀ {b α} → G α → (Name (b ◅ α) → G α)
   substName t = exportWith t V
 
-module TraverseAGen {F G} (V : Name |↦| G) (traverseAFGG : TraverseA F G G) where
+module TraverseAGen {F G} (V : Name ↦° G) (traverseAFGG : TraverseA F G G) where
   traverseAFGName : TraverseA F G Name
   traverseAFGName E-app trKit = traverseAFGG E-app (mapKit id (_<$>_ V) trKit)
      where open Applicative E-app
   open TraverseAFGNameGen traverseAFGName public
 
 module SubstøGen {F G}
-                 (V           : Name |↦| G)
+                 (V           : Name ↦° G)
                  (coerceø     : Coerceø G G)
                  (traverseFGG : Traverse F G G) where
 
@@ -538,7 +538,7 @@ module SubstøGen {F G}
 -- However if we assume that calls to coerce are erased
 -- by an optimizing compiler then they are as good as SubstCGen.
 module SubstGen {F G}
-                (V           : Name |↦| G)
+                (V           : Name ↦° G)
                 (coerce      : Coerce G G)
                 (traverseFGG : Traverse F G G) where
   subst : Subst F G

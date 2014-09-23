@@ -34,7 +34,7 @@ SynAbsᴰ F α = F (α ↑1)
 
 FunAbsᴰ : (World → Set) → World → Set
 -- FunAbsᴰ F α = ∀ {β} k → (α +ᵂ k) ⊆ β → (F β → F β)
-FunAbsᴰ F = Shifted (F |→| F)
+FunAbsᴰ F = Shifted (F →° F)
 
 shiftFunAbsᴰ : ∀ {F} → Shift (FunAbsᴰ F) (FunAbsᴰ F)
 shiftFunAbsᴰ {_} {α} {β} k ⊆w f {γ} k' ⊆w'
@@ -223,7 +223,7 @@ module Traversable {E} (E-app : Applicative E)
   traverseName : Tr Name
   traverseName = trName
 
-  traverse-× : ∀ {G H} → Tr G → Tr H → Tr (G |×| H)
+  traverse-× : ∀ {G H} → Tr G → Tr H → Tr (G ×° H)
   traverse-× trG trH ℓ (x , y) = trG ℓ x ⊗ trH ℓ y
 
   traverseAbs : ∀ {G} → Tr G → Tr (SynAbsᴰ G)
@@ -237,7 +237,7 @@ TraverseA : (F G H : World → Set) → Set₁
 TraverseA F G H = ∀ {E} (E-app : Applicative E) → Traverse F (E ∘ G) (E ∘ H)
 
 Var : (World → Set) → Set
-Var F = Name |↦| F
+Var F = Name ↦° F
 
 Rename : (F G : World → Set) → Set
 Rename F G = ∀ {α β} → (α →ᴺ β) → (F α → G β)
@@ -356,7 +356,7 @@ module RenameAGen {F G} (renameA : RenameA F G) where
   rename = renameA id-app
 
   rename? : Rename? F G
-  rename? = renameA Maybe.applicative
+  rename? = renameA (Maybe.applicative _)
 
   subtract? : Subtract? F G
   subtract? = rename? ∘ subtractᴺ?
@@ -414,10 +414,10 @@ module SubstGen {F G} (V : Var G)
   substName : ∀ {α} → G α → (Name (α ↑1) → G α)
   substName t = subtractWithᴺ 1 t V
 
-  syn2fun : SynAbsᴰ F |↦| FunAbsᴰ G
+  syn2fun : SynAbsᴰ F ↦° FunAbsᴰ G
   syn2fun t k pf u = subst (subtractWithᴺ 1 u (V ∘ shiftName 0 k pf)) t
 
-fun2syn : ∀ {F} (V : Var F) → FunAbsᴰ F |↦| SynAbsᴰ F
+fun2syn : ∀ {F} (V : Var F) → FunAbsᴰ F ↦° SynAbsᴰ F
 fun2syn {F} V {α} f = f 1 ⊆-+1↑1 (V (0 ᴺ))
 
 {-
@@ -427,7 +427,7 @@ module Substitution {α β} where
   SuF : ∀ F → Set
   SuF F = Su↑ F F α β
 
-  subst-× : ∀ {F₁ F₂ G₁ G₂} → Su↑ F₁ G₁ α β → Su↑ F₂ G₂ α β → Su↑ (F₁ |×| F₂) (G₁ |×| G₂) α β
+  subst-× : ∀ {F₁ F₂ G₁ G₂} → Su↑ F₁ G₁ α β → Su↑ F₂ G₂ α β → Su↑ (F₁ ×° F₂) (G₁ ×° G₂) α β
   subst-× subst₁ subst₂ ℓ (x , y) = (subst₁ ℓ x , subst₂ ℓ y)
 
   substAbs : ∀ {F G} → Su↑ F G α β → Su↑ (SynAbsᴰ F) (SynAbsᴰ G) α β
@@ -441,10 +441,10 @@ protect↑A′ E-app θ = substVar pure shift θ
   where open Applicative E-app using (pure; _<$>_)
         open RenameGen _<$>_ using (shift)
 
-|Cmp↑| : (F : World → Set) (α β : World) → Set
-|Cmp↑| F α β = ∀ k → |Cmp| F (α ↑ k) (β ↑ k)
+Cmp↑° : (F : World → Set) (α β : World) → Set
+Cmp↑° F α β = ∀ k → Cmp° F (α ↑ k) (β ↑ k)
 
-cmp↑Name : ∀ {α β} → |Cmp| Name α β → |Cmp↑| Name α β
+cmp↑Name : ∀ {α β} → Cmp° Name α β → Cmp↑° Name α β
 cmp↑Name Γ k x y with x <ᴺ k | y <ᴺ k
 ... | inj₁ x′ | inj₁ y′ = x′ ==ᴺ y′
 ... | inj₂ x′ | inj₂ y′ = Γ (subtractᴺ k x′) (subtractᴺ k y′)
@@ -452,11 +452,11 @@ cmp↑Name Γ k x y with x <ᴺ k | y <ᴺ k
 
 -- This specialisation of cmp↑Name to k = 1, is the de Bruijn version
 -- of the function extendNameCmp used for nominal
-cmp↑1Name : ∀ {α β} → |Cmp| Name α β → |Cmp| Name (α ↑1) (β ↑1)
+cmp↑1Name : ∀ {α β} → Cmp° Name α β → Cmp° Name (α ↑1) (β ↑1)
 cmp↑1Name Γ = cmp↑Name Γ 1
 
-cmp↑-× : ∀ {α β F G} → |Cmp↑| F α β → |Cmp↑| G α β → |Cmp↑| (F |×| G) α β
+cmp↑-× : ∀ {α β F G} → Cmp↑° F α β → Cmp↑° G α β → Cmp↑° (F ×° G) α β
 cmp↑-× cmpF cmpG k (x₁ , y₁) (x₂ , y₂) = cmpF k x₁ x₂ ∧ cmpG k y₁ y₂
 
-cmp↑Absᴰ : ∀ {α β F} → |Cmp↑| F α β → |Cmp↑| (SynAbsᴰ F) α β
+cmp↑Absᴰ : ∀ {α β F} → Cmp↑° F α β → Cmp↑° (SynAbsᴰ F) α β
 cmp↑Absᴰ cmpF = cmpF ∘ suc

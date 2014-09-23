@@ -19,11 +19,11 @@ open NomPa.Derived nomPa
 open NomPa.Derived.NaPa nomPa using (SynAbsᴰ)
 open NomPa.Traverse nomPa
 open Data.Indexed {_} {World}
-  using (|Set|; |pure|; |liftA|; |liftA2|; _|→|_; _|↦|_;
-         |List|; |Maybe|; |∀|)
+  using (Set°; pure°; liftA°; liftA2°; _→°_; _↦°_;
+         List°; Maybe°; ∀°)
 
 𝔼 : Set₁
-𝔼 = |Set| _
+𝔼 = Set° _
 
 Nameᵉ : 𝔼
 Nameᵉ = Name
@@ -42,23 +42,23 @@ Absᴰᵉ : 𝔼 → 𝔼
 Absᴰᵉ = SynAbsᴰ
 
 Neutralᵉ : Set → 𝔼
-Neutralᵉ = |pure|
+Neutralᵉ = pure°
 
 Neutral1ᵉ : (Set → Set) → (𝔼 → 𝔼)
-Neutral1ᵉ = |liftA|
+Neutral1ᵉ = liftA°
 
 Neutral2ᵉ : (Set → Set → Set) → (𝔼 → 𝔼 → 𝔼)
-Neutral2ᵉ = |liftA2|
+Neutral2ᵉ = liftA2°
 
 infixr 0 _→ᵉ_ _↦ᵉ_ _⇒ᵉ_
 infixr 1 _⊎ᵉ_
 infixr 2 _×ᵉ_
 
 _↦ᵉ_ : 𝔼 → 𝔼 → Set
-_↦ᵉ_ = _|↦|_
+_↦ᵉ_ = _↦°_
 
 _→ᵉ_ : 𝔼 → 𝔼 → 𝔼
-_→ᵉ_ = _|→|_
+_→ᵉ_ = _→°_
 
 _⇒ᵉ_ : 𝔼 → 𝔼 → 𝔼
 (E₁ ⇒ᵉ E₂) α = ∀ {β} → α ⊆ β → (E₁ →ᵉ E₂) β
@@ -88,7 +88,7 @@ Maybeᵉ = Neutral1ᵉ Maybe
 1ᵉ = Neutralᵉ ⊤
 
 ∀ᵉ : 𝔼 → Set
-∀ᵉ = |∀|
+∀ᵉ = ∀°
 
 Empty : 𝔼 → Set
 Empty E = E ø

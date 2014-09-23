@@ -40,7 +40,7 @@ cmpTm _ (Let _ _ _) (_ · _) = false
 cmpTm _ (Let _ _ _) (ƛ _ _) = false
 -}
 
-open TmEq (|Cmp| Name) id extendNameCmp public
+open TmEq (Cmp° Name) id extendNameCmp public
 
 _==ᵀᵐ_ : ∀ {α} → Tm α → Tm α → Bool
 _==ᵀᵐ_ = cmpTm _==ᴺ_

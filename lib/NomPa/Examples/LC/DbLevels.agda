@@ -210,7 +210,7 @@ t [0≔ u ] = substTmᴸ0 (exportWith u V) t
 -- Note however that while EqTmᴸ is more efficient and simpler the functions
 -- in this module CmpTmᴸ are more general (does not require the same starting binder).
 module CmpTmᴸ where
-  cmpTmᴸ : ∀ {α β s₁ s₂} → |Cmp| Name α β → Tmᴸ s₁ α → Tmᴸ s₂ β → Bool
+  cmpTmᴸ : ∀ {α β s₁ s₂} → Cmp° Name α β → Tmᴸ s₁ α → Tmᴸ s₂ β → Bool
   cmpTmᴸ Δ (V x₁)      (V x₂)      = Δ x₁ x₂
   cmpTmᴸ Δ (t₁ · u₁)   (t₂ · u₂)   = cmpTmᴸ Δ t₁ t₂ ∧ cmpTmᴸ Δ u₁ u₂
   cmpTmᴸ Δ (ƛ t₁)     (ƛ t₂)      = cmpTmᴸ (extendNameCmp Δ) t₁ t₂

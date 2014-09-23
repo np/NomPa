@@ -180,14 +180,14 @@ module LC _↪_ {link : Link _↪_} (flink : FreshLink link) where
  fv (ƛ ℓ t)     = rmℓ ℓ (fv t)
  fv (Let ℓ t u) = fv t ++ rmℓ ℓ (fv u)
 
- extendCmpName : ∀ {α β α′ β′} → |Cmp| Name α β → α ↪ α′ → β ↪ β′ → |Cmp| Name α′ β′
+ extendCmpName : ∀ {α β α′ β′} → Cmp° Name α β → α ↪ α′ → β ↪ β′ → Cmp° Name α′ β′
  extendCmpName f ℓ₁ ℓ₂ x₁ x₂
   with strengthen? ℓ₁ x₁ | strengthen? ℓ₂ x₂
  ... | just x₁′          | just x₂′ = f x₁′ x₂′
  ... | nothing           | nothing = true
  ... | _                 | _       = false
 
- cmpTm : ∀ {α β} → |Cmp| Name α β → |Cmp| Tm α β
+ cmpTm : ∀ {α β} → Cmp° Name α β → Cmp° Tm α β
  cmpTm f (V x)       (V x′)       = f x x′
  cmpTm f (t · u)     (t′ · u′)     = cmpTm f t t′ ∧ cmpTm f u u′
  cmpTm f (ƛ ℓ t)     (ƛ ℓ′ t′)     = cmpTm (extendCmpName f ℓ ℓ′) t t′
@@ -195,7 +195,7 @@ module LC _↪_ {link : Link _↪_} (flink : FreshLink link) where
                                   ∧ cmpTm (extendCmpName f ℓ ℓ′) u u′
  cmpTm _ _           _            = false
 
- _==Tm_ : ∀ {α} → |Cmp| Tm α α
+ _==Tm_ : ∀ {α} → Cmp° Tm α α
  _==Tm_ = cmpTm _==ᴺ_
 
  idTm : Tm ø
@@ -218,7 +218,7 @@ module LC _↪_ {link : Link _↪_} (flink : FreshLink link) where
   Res : World → Set
   Res α = ∀ {β} → Env α β → Tm β
 
-  V′ : Name |↦| Res
+  V′ : Name ↦° Res
   V′ x Γ = trName Γ x
 
   _·′_ : ∀ {α} (t u : Res α) → Res α
@@ -232,7 +232,7 @@ module LC _↪_ {link : Link _↪_} (flink : FreshLink link) where
   Let′ ℓ t u Γ with commEnv (ℓ , Γ)
   ... | _ , ℓ′ , Γ′ = Let ℓ′ (t Γ) (u Γ′)
 
-  tr : Tm |↦| Res
+  tr : Tm ↦° Res
   tr (V x)       = V′ x
   tr (t · u)     = tr t ·′ tr u
   tr (ƛ ℓ t)     = ƛ′ ℓ (tr t)

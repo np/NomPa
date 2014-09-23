@@ -15,7 +15,8 @@ import Data.Nat.Properties as Nat
 open import Function
 open import Function.Equality as ⟶≡ using (_⟶_; _⟨$⟩_)
 open import Data.Sum.NP as Sum using (_⊎_; inl; inr; [_,_]′) renaming (map to ⊎-map)
-open import Data.Bool.NP using (Bool; true; false; if_then_else_; T; not; T'not'¬)
+open import Data.Bool using (Bool; true; false; if_then_else_; T; not)
+open import Data.Two renaming (✓-not-¬ to T'not'¬)
 open import Data.Unit using (⊤)
 open import Data.Empty using (⊥; ⊥-elim)
 open import Data.Product.NP using (_,_)
@@ -89,7 +90,7 @@ Nm α = On.setoid ⟦ℕ⟧-setoid (name {α})
 ≡ᴺ-equality {α}
    = record { isEquivalence = Setoid.isEquivalence (Nm α)
               -- I would prefered not going to PropEq.≡
-            ; subst = λ P → ≡.subst P ∘ name-injective ∘ Equality.to-propositional ⟦ℕ⟧-equality }
+            ; subst = λ P → ≡.tr P ∘ name-injective ∘ Equality.to-propositional ⟦ℕ⟧-equality }
 
 module NmEq {α} = Equality (≡ᴺ-equality {α})
 

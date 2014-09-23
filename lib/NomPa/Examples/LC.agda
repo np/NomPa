@@ -11,7 +11,7 @@ open import Data.List
 open import Data.Product.NP
 open import Data.Nat
 open import Data.Nat.Show
-open import Data.Indexed using (_|↦|_)
+open import Data.Indexed using (_↦°_)
 open import Data.Sum
 open import Data.String renaming (_++_ to _++ˢ_)
 open import Data.Bool

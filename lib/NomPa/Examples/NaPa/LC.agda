@@ -194,9 +194,9 @@ open Tmᴰ⇒Tmᴿ public renaming (! to convTmᴰ⇒Tmᴿ)
 showTmᴰ : Tmᴰ ø → String
 showTmᴰ = showTmᴿ ∘ Tmᴰ⇒Tmᴿ.! 0
 
-cmpTmᴰ : ∀ {α β} → |Cmp| Name α β → |Cmp| Tmᴰ α β
+cmpTmᴰ : ∀ {α β} → Cmp° Name α β → Cmp° Tmᴰ α β
 cmpTmᴰ {α} {β} Γ = go 0 where
-  go : ∀ ℓ → |Cmp| Tmᴰ (α ↑ ℓ) (β ↑ ℓ)
+  go : ∀ ℓ → Cmp° Tmᴰ (α ↑ ℓ) (β ↑ ℓ)
   go ℓ (V x)   (V y)        = cmp↑Name Γ ℓ x y
   go ℓ (t · u) (v · w)      = go ℓ t v ∧ go ℓ u w
   go ℓ (ƛ t) (ƛ u)          = go (suc ℓ) t u
@@ -204,7 +204,7 @@ cmpTmᴰ {α} {β} Γ = go 0 where
   go _ (` m) (` n)          = m ==ℕ n
   go _ _ _                  = false
 
-eqTmᴰ : ∀ {α} → |Cmp| Tmᴰ α α
+eqTmᴰ : ∀ {α} → Cmp° Tmᴰ α α
 eqTmᴰ (V x)     (V y)     = x ==ᴺ y
 eqTmᴰ (t · u)   (v · w)   = eqTmᴰ t v ∧ eqTmᴰ u w
 eqTmᴰ (ƛ t)     (ƛ u)     = eqTmᴰ t u

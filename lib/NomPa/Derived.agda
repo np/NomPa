@@ -23,7 +23,7 @@ _→ᴺ?_ : (α β : World) → Set
 α →ᴺ? β = Name α →? Name β
 
 SynAbsᴺ : (World → Set) → (World → Set)
-SynAbsᴺ F α = Σ[ b ∶ Binder ] F (b ◅ α)
+SynAbsᴺ F α = Σ Binder λ b → F (b ◅ α)
 
 FunAbs : (World → Set) → (World → Set)
 FunAbs F α = ∀ {β} → (α ⊆ β) → F β → F β
@@ -320,7 +320,7 @@ rm b (x ∷ xs) with  exportᴺ? x
 ...                 |  nothing = rm b xs
 ...                 |  just x′ = x′  ∷ rm b xs
 
-extendNameCmp : ∀ {α₁ α₂ b₁ b₂} → |Cmp| Name α₁ α₂ → |Cmp| Name (b₁ ◅ α₁) (b₂ ◅ α₂)
+extendNameCmp : ∀ {α₁ α₂ b₁ b₂} → Cmp° Name α₁ α₂ → Cmp° Name (b₁ ◅ α₁) (b₂ ◅ α₂)
 extendNameCmp f x₁ x₂
  with exportᴺ? x₁ | exportᴺ? x₂
 ... | just x₁′     | just x₂′ = f x₁′ x₂′
@@ -328,7 +328,7 @@ extendNameCmp f x₁ x₂
 ... | _           | _       = false
 
 -- α-equivalence on pairs is just the conjunction
-×-Cmp : ∀ {α β F G} → |Cmp| F α β → |Cmp| G α β → |Cmp| (F |×| G) α β
+×-Cmp : ∀ {α β F G} → Cmp° F α β → Cmp° G α β → Cmp° (F ×° G) α β
 ×-Cmp rel-F rel-G  (x₁ , y₁) (x₂ , y₂) = rel-F x₁ x₂ ∧ rel-G y₁ y₂
 
 data αEqDataEnv : (α₁ α₂ : World) → Set where
@@ -338,6 +338,6 @@ data αEqDataEnv : (α₁ α₂ : World) → Set where
 extendαEqDataEnv : ∀ {α₁ α₂ b₁ b₂} → αEqDataEnv α₁ α₂ → αEqDataEnv (b₁ ◅ α₁) (b₂ ◅ α₂)
 extendαEqDataEnv d = d ,, _ ↔ _
 
-cmpNameαEqDataEnv : ∀ {α₁ α₂} → αEqDataEnv α₁ α₂ →  |Cmp| Name α₁ α₂
+cmpNameαEqDataEnv : ∀ {α₁ α₂} → αEqDataEnv α₁ α₂ →  Cmp° Name α₁ α₂
 cmpNameαEqDataEnv ε = _==ᴺ_
 cmpNameαEqDataEnv (Γ ,, b₁ ↔ b₂) = extendNameCmp (cmpNameαEqDataEnv Γ)

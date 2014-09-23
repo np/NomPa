@@ -28,11 +28,11 @@ open NomPa.Derived.NaPa nomPa using (SynAbsᴰ)
 open NomPa.Traverse nomPa
 
 open Data.Indexed {_} {Sort → World}
-  using (|Set|; |pure|; |liftA|; |liftA2|; _|→|_; _|↦|_;
-         |List|; |Maybe|)
+  using (Set°; pure°; liftA°; liftA2°; _→°_; _↦°_;
+         List°; Maybe°)
 
 𝔼 : Set₁
-𝔼 = |Set| _
+𝔼 = Set° _
 
 Nameᵉ : Sort → 𝔼
 Nameᵉ κ Γ = Name (Γ κ)
@@ -44,13 +44,13 @@ _[_≔_] : (Sort → World) → Sort → World → (Sort → World)
 (< κ >ᵉ F) Γ = ∃[ b ] F (Γ [ κ ≔ b ◅ Γ κ ])
 
 Neutralᵉ : Set → 𝔼
-Neutralᵉ = |pure|
+Neutralᵉ = pure°
 
 Neutral1ᵉ : (Set → Set) → (𝔼 → 𝔼)
-Neutral1ᵉ = |liftA|
+Neutral1ᵉ = liftA°
 
 Neutral2ᵉ : (Set → Set → Set) → (𝔼 → 𝔼 → 𝔼)
-Neutral2ᵉ = |liftA2|
+Neutral2ᵉ = liftA2°
 
 infixr 0 _→ᵉ_
 infixr 0 _↦ᵉ_
@@ -58,7 +58,7 @@ infixr 1 _⊎ᵉ_
 infixr 2 _×ᵉ_
 
 _→ᵉ_ : 𝔼 → 𝔼 → 𝔼
-_→ᵉ_ = _|→|_
+_→ᵉ_ = _→°_
 
 _×ᵉ_ : 𝔼 → 𝔼 → 𝔼
 _×ᵉ_ = Neutral2ᵉ _×_
@@ -73,7 +73,7 @@ Maybeᵉ : 𝔼 → 𝔼
 Maybeᵉ = Neutral1ᵉ Maybe
 
 _↦ᵉ_ : 𝔼 → 𝔼 → Set
-_↦ᵉ_ = _|↦|_
+_↦ᵉ_ = _↦°_
 
 1ᵉ : 𝔼
 1ᵉ = Neutralᵉ ⊤
