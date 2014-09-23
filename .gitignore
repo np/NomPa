@@ -1,0 +1,8 @@
+\#*\#
+*.swp
+*~
+*.agdai
+.*.vim
+lib/html/
+lib/MAlonzo/
+\.gup/
