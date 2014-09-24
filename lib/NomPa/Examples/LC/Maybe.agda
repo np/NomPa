@@ -73,16 +73,18 @@ mapTmᴹ^ {A} {B} f = go 0 where
   go ℓ (Let t u) = Let (go ℓ t) (go (suc ℓ) u)
   go ℓ (` κ) = ` κ
 
-map?^ : ∀ {A B} ℓ → (A → B) → Maybe^ ℓ A → Maybe^ ℓ B
+map?^ : ∀ {a b} {A : Set a} {B : Set b} ℓ → (A → B) → Maybe^ ℓ A → Maybe^ ℓ B
 map?^ zero    = id
 map?^ (suc n) = map? ∘ map?^ n 
 
 -- analog to `subtractᴺ?'
+{-
 just^ : ∀ {A} ℓ → A → Maybe^ ℓ A
 just^ zero    = id
 just^ (suc n) = just ∘′ just^ n
+-}
 
-shift?^ : ∀ {A} k ℓ → Maybe^ ℓ A → Maybe^ ℓ (Maybe^ k A)
+shift?^ : ∀ {a} {A : Set a} k ℓ → Maybe^ ℓ A → Maybe^ ℓ (Maybe^ k A)
 shift?^ k ℓ = map?^ ℓ (just^ k) 
 
 shiftTmᴹ^ : ∀ {A} k → Tmᴹ A → Tmᴹ (Maybe^ k A)
@@ -93,26 +95,26 @@ shiftTmᴹ^ = mapTmᴹ^ ∘ shift?^
 -- * join?^ 0 => just
 -- * join?^ 1 => id
 -- * join?^ 2 => join?
-join?^ : ∀ {A} n → Maybe^ n A → Maybe A
+join?^ : ∀ {a} {A : Set a} n → Maybe^ n A → Maybe A
 join?^ zero    = just
-join?^ (suc n) = join? ∘ map? (join?^ n)
+join?^ (suc n) = join? ∘′ map? (join?^ n)
 
 open import Relation.Binary.PropositionalEquality
 
-Maybe^-∘-+ : ∀ m n → Maybe^ m ∘ Maybe^ n ≡ Maybe^ (m + n)
-Maybe^-∘-+ zero    _ = refl
-Maybe^-∘-+ (suc m) n = cong (_∘_ Maybe) (Maybe^-∘-+ m n)
+Maybe^-∘-+' : ∀ {a} m n → Maybe^ {a} m ∘ Maybe^ n ≡ Maybe^ (m + n)
+Maybe^-∘-+' zero    _ = refl
+Maybe^-∘-+' (suc m) n = cong (_∘_ Maybe) (Maybe^-∘-+' m n)
 
-Maybe^-comm^ : ∀ m n → Maybe^ m ∘ Maybe^ n ≡ Maybe^ n ∘ Maybe^ m
-Maybe^-comm^ m n = trans (Maybe^-∘-+ m n)
+Maybe^-comm^ : ∀ {a} m n → Maybe^ {a} m ∘ Maybe^ n ≡ Maybe^ n ∘ Maybe^ m
+Maybe^-comm^ m n = trans (Maybe^-∘-+' m n)
                   (trans (cong Maybe^ (ℕ°.+-comm m n))
-                    (sym (Maybe^-∘-+ n m)))
+                    (sym (Maybe^-∘-+' n m)))
 
-coerce-comm^ : ∀ {A} m n → Maybe^ m (Maybe^ n A) → Maybe^ n (Maybe^ m A)
-coerce-comm^ {A} m n = subst id (cong (λ x → x A) (Maybe^-comm^ m n))
+coerce-comm^ : ∀ {a} {A : Set a} m n → Maybe^ m (Maybe^ n A) → Maybe^ n (Maybe^ m A)
+coerce-comm^ {_} {A} m n = subst id (cong (λ x → x A) (Maybe^-comm^ m n))
 
 -- analog to `unprotectedAdd'
-unprotectedJust^ : ∀ {A} k ℓ → Maybe^ ℓ A → Maybe^ ℓ (Maybe^ k A)
+unprotectedJust^ : ∀ {a} {A : Set a} k ℓ → Maybe^ ℓ A → Maybe^ ℓ (Maybe^ k A)
 unprotectedJust^ k ℓ = coerce-comm^ k ℓ ∘ just^ k
 
 open import Data.Empty

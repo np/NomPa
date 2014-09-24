@@ -18,5 +18,5 @@ open Ctors
 test₁ : fvTm 4 apTm ≡ []
 test₁ = refl
 
-test₂ : map? (List.map binderᴺ ∘ fvTm 3 ∘ proj₂) (unLam apTm) ≡ just [ 0 ]
+test₂ : map? (List.map binderᴺ ∘ fvTm 3 ∘ snd) (unLam apTm) ≡ just [ 0 ]
 test₂ = refl

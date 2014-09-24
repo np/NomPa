@@ -4,7 +4,7 @@ open import Function.InstanceArguments
 open import Data.Nat
 open import Data.Unit using (⊤)
 -- open import Reflection.NP using (ηⁿ)
-open import Data.Product
+open import Data.Product.NP
 open import Category.Functor
             renaming (RawFunctor to Functor; module RawFunctor to Functor)
 open import Category.Applicative
@@ -209,7 +209,7 @@ module M3 where
   var = Applicative.pure …
 
   weaken : ∀ {H H′ A : Set} {M Repr : Set → Set} {{M-app : Functor M}} → M (HV H Repr A) → M (HV (H′ × H) Repr A)
-  weaken = Functor._<$>_ … (λ g → g ∘ proj₂) -- hmap goes yellow
+  weaken = Functor._<$>_ … (λ g → g ∘ snd) -- hmap goes yellow
 
   lib : Lib
   lib = mk HA lam href

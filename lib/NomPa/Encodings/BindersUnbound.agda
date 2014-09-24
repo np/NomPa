@@ -3,7 +3,7 @@ import NomPa.Encodings.AlphaCaml
 import NomPa.Derived
 open import Data.List
 open import Data.Nat
-open import Function.NP
+open import Function.NP hiding (Π)
 open import Data.Product.NP using (_×_;∃;_,_)
 import Data.Indexed
 

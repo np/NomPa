@@ -65,6 +65,7 @@ module M (nomPa : NomPa) where
 open import NomPa.Implem using (nomPa)
 open M nomPa
 
+{-
 ex₁ : cps-t₁ ≡ cps-t₁-ref
 ex₁ = ≡.refl
 
@@ -76,3 +77,4 @@ ex₄ = ≡.refl
 
 -- ex₃ : showTmø cpsβ-t₁ ≡ showTmø cpsβ-t₁-ref
 -- ex₃ = {!!} -- ≡.refl
+-}

@@ -3,7 +3,7 @@ open import NomPa.Record
 import      NomPa.Derived
 open import Data.Maybe.NP as Maybe
 open import Data.Sum
-open import Data.Product
+open import Data.Product.NP
 open import Function.NP
 open import Category.Monad
             renaming (RawMonad to Monad; module RawMonad to Monad)
@@ -318,7 +318,7 @@ CoerceEnvᴸ : EnvTypeᴸ
 CoerceEnvᴸ b₁ b₂ α β = b₁ ≡ b₂ × α ⊆ β
 
 coerceKitᴸ : TrKitᴸ CoerceEnvᴸ (const Name)
-coerceKitᴸ = mk (coerceᴺ ∘ proj₂) extEnv where
+coerceKitᴸ = mk (coerceᴺ ∘ snd) extEnv where
   extEnv : ExtEnvᴸ CoerceEnvᴸ
   extEnv (≡.refl , pf) = ≡.refl , ⊆-◅ _ pf
 
