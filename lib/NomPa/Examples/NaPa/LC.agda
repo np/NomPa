@@ -177,10 +177,10 @@ fvᴰ (ƛ t)        = rm₀ (fvᴰ t)
 fvᴰ (Let t u)    = fvᴰ t ++ rm₀ (fvᴰ u)
 
 module Tmᴰ⇒Tmᴿ where
-  open import Data.Nat.Show
+  open import Data.Nat.Show renaming (show to showℕ)
   open import Data.Fin as Fin using (toℕ)
   binder! : ℕ → String
-  binder! n = "x" ++ˢ show n
+  binder! n = "x" ++ˢ showℕ n
   name! : ∀ ℓ → Name (ø ↑ ℓ) → String
   name! ℓ x = binder! (ℓ ∸ suc (Fin.toℕ (toFin {ℓ} x)))
   ! : ∀ ℓ → Tmᴰ (ø ↑ ℓ) → Tmᴿˢ

@@ -173,7 +173,7 @@ renameTmᴸA E-app s₂#β trNameᴸ =
   TraverseANameTmᴸ.trTmᴸ E-app (renameAKitᴸ E-app) (trNameᴸ , s₂#β)
 
 renameTmᴸ? : ∀ {α β s₁ s₂} → s₂ # β → (α →ᴺ? β) → Tmᴸ s₁ α →? (Tmᴸ s₂ β)
-renameTmᴸ? = renameTmᴸA Maybe.applicative
+renameTmᴸ? = renameTmᴸA (Maybe.applicative _)
 
 closeTmᴸ? : ∀ {s α} → Tmᴸ s α →? Tmᴸ s ø
 closeTmᴸ? = renameTmᴸ? (_ #ø) (const nothing)

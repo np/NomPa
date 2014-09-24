@@ -353,7 +353,7 @@ module DerivedOperationsByHand where
   coerceTmø t = renameTm Nameø-elim t
 
   renameTm? : ∀ {α β} → (Name α →? Name β) → Tm α →? Tm β
-  renameTm? = renameTmA Maybe.applicative
+  renameTm? = renameTmA (Maybe.applicative _)
 
   subtractTm? : ∀ {α} ℓ → Tm (α ↑ ℓ) →? Tm α
   subtractTm? = renameTm? ∘ subtractᴺ?

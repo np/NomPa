@@ -303,7 +303,7 @@ module RenameAGen {F G} (renameA : RenameA F G) where
   rename = renameA id-app
 
   rename? : Rename? F G
-  rename? = renameA Maybe.applicative
+  rename? = renameA (Maybe.applicative _)
 
   subtract? : Subtract? F G
   subtract? = rename? ∘ subtractᴺ?

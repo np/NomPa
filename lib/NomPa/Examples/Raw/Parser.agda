@@ -1,4 +1,4 @@
-open import Data.Maybe.NP as Maybe
+import Data.Maybe.NP as Maybe
 open import Data.Nat
 open import Data.Unit
 open import Data.Bool
@@ -12,7 +12,8 @@ import Level as L
 import NomPa.Examples.Raw
 open NomPa.Examples.Raw.DataType String
 
-open M? L.zero using () renaming (_>>=_ to _>>=?_; _=<<_ to _=<<?_)
+open Maybe using (Maybe; nothing; just; _→?_; just?)
+open Maybe.M? L.zero using () renaming (_>>=_ to _>>=?_; _=<<_ to _=<<?_)
 
 module NomPa.Examples.Raw.Parser where
 
@@ -52,7 +53,7 @@ tok c = spaces *> char c *> pure _
 
 mutual
   tm : ℕ → Parser Tmᴿ
-  tm n = pure appⁿ ⊛ tm′ n ⊛ many (someSpaces *> tm′ n) n
+  tm n = pure appⁿ ⊛ tm′ n ⊛ many n (someSpaces *> tm′ n)
 
   tm′ : ℕ → Parser Tmᴿ
   tm′ 0 = empty

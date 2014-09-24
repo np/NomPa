@@ -10,7 +10,7 @@ open import Data.Unit using (⊤)
 open import Data.List
 open import Data.Product.NP
 open import Data.Nat
-open import Data.Nat.Show
+open import Data.Nat.Show renaming (show to showℕ)
 open import Data.Indexed using (_↦°_)
 open import Data.Sum
 open import Data.String renaming (_++_ to _++ˢ_)
@@ -100,7 +100,7 @@ module DerivedByHand where
   renameCoerceTm s f β⊆γ = tr′ id-app (coerceKit ∘-Kit renameKit) ((f , s) , β⊆γ)
 
   renameTm? : ∀ {α β} → Supply β → (α →ᴺ? β) → Tm α →? Tm β
-  renameTm? = renameTmA Maybe.applicative
+  renameTm? = renameTmA (Maybe.applicative _)
 
   exportTm? : ∀ {b α} → Supply α → Tm (b ◅ α) →? Tm α
   exportTm? s = renameTm? s exportᴺ?
@@ -552,7 +552,7 @@ module Printer where
       level  : ℕ
 
     prBinder : Pr Binder
-    prBinder _ = `` "x" ∘ ``(show fresh)
+    prBinder _ = `` "x" ∘ ``(showℕ fresh)
 
     extend : ∀ {b} → PrEnv (b ◅ α)
     extend {b} = record { prName = exportWith (prBinder b) prName; fresh = suc fresh; level = level }

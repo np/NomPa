@@ -14,7 +14,8 @@ module DataType (Atom : Set) where
   appⁿ = foldl _·_
 
 open import Function.NP
-open import Data.Bool.NP hiding (_≟_)
+open import Data.Bool
+open import Data.Bool.NP
 open import Relation.Nullary
 
 Rel₀ : Set → Set₁
@@ -154,13 +155,13 @@ module ∼Tm (Atom : Set) (_==ᴬ_ : Cmp Atom) where
     ƛ : ∀ {b₁ b₂ b₃ t₁ t₂} (b₃# : b₃ #) (tᵣ : swap b₃ and b₁ in™ t₁ ∼™ swap b₃ and b₂ in™ t₂) → ƛ b₁ t₁ ∼™ ƛ b₂ t₂
     _·_ : ∀ {t u t′ u′} (tᵣ : t ∼™ t′) (uᵣ : u ∼™ u′) → t · u ∼™ t′ · u′
 
-{-
-
-THIS PART IS UNFINISHED BUT VERY IMPORTANT
-
 open import Data.Unit using (⊤)
 open import Data.Empty
 open import Data.Nat.NP renaming (_==_ to _==ℕ_)
+
+{-
+
+THIS PART IS UNFINISHED BUT VERY IMPORTANT
 
 module CmpEqn⇔CmpConv where
   Atom : Set
@@ -447,6 +448,7 @@ module CmpEqn⇔CmpConv where
           pf'' : π₁ ● ƛ _ t₁ ∼ π₂ ● ƛ _ t₂
           pf'' = ƛ {b₃ = c} {!!} pf'
   thm' R (tᵣ · uᵣ) = thm' R tᵣ · thm' R uᵣ
+-}
 
 {-
   postulate

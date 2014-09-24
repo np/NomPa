@@ -1,6 +1,5 @@
 open import Data.String
 open import Data.Nat
-open import Data.Nat.Show
 open import Data.Bool
 open import Function
 open import Relation.Nullary
