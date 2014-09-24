@@ -444,9 +444,9 @@ module Reducer (split  : ∀ {α} → Tm α → CTm α)
   reduce★ t with val? t
   ... | true = return t
   ... | false = later (♯ r)
-      where st = proj₂ (split t)
-            c  = proj₁ st
-            u  = proj₂ st
+      where st = snd (split t)
+            c  = fst st
+            u  = snd st
             r  = reduce★ (plug c (reduce u))
 
   module Check (n : ℕ) where

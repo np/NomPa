@@ -2,7 +2,6 @@ module NomPa.Examples.NBE.Tests where
 
 open import NomPa.Record
 open import Data.Product hiding (map)
-open import Data.Bool.NP using (check)
 open import Data.List
 import NomPa.Examples.NBE
 import NomPa.Examples.NBE.Can

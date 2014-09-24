@@ -42,7 +42,7 @@ record FreshLink {_↪_} (link : Link _↪_) : Set where
   field
     -- An infinite set of binding-links
     init   : Fresh ø
-    next   : ∀ {α} (x : Fresh α) → Fresh (proj₁ x)
+    next   : ∀ {α} (x : Fresh α) → Fresh (fst x)
 
   open Link link public
 
@@ -85,7 +85,7 @@ module Nom where
   init : Fresh ø
   init = _ , 0 ˢ , ≡.refl
 
-  next : ∀ {α} (x : Fresh α) → Fresh (proj₁ x)
+  next : ∀ {α} (x : Fresh α) → Fresh (fst x)
   next (._ , s , ≡.refl) = _ , sucˢ s , ≡.refl
 
   -- ⊆-does-not-commute : ¬ (∀ {α β γ} → α ↪ γ → α ⊆ β → ∃[ δ ](γ ⊆ δ × β ↪ δ))
@@ -115,7 +115,7 @@ module DeBruijn where
   init : Fresh ø
   init = _ , ≡.refl
 
-  next : ∀ {α} (x : Fresh α) → Fresh (proj₁ x)
+  next : ∀ {α} (x : Fresh α) → Fresh (fst x)
   next _ = _ , ≡.refl
 
   deBruijnFreshLinks : FreshLink deBruijnLinks
@@ -151,7 +151,7 @@ module Traverse {_↪_} {link : Link _↪_} (flink : FreshLink link) where
   RenameEnv α β = Fresh β × (Name α → Name β)
 
   renameKit : TrKit RenameEnv Name
-  renameKit = mk proj₂ comm
+  renameKit = mk snd comm
     where
       comm : Comm RenameEnv
       comm (x , (_ , y) , f)
@@ -200,13 +200,13 @@ module LC _↪_ {link : Link _↪_} (flink : FreshLink link) where
 
  idTm : Tm ø
  idTm = ƛ x (V xᴺ)
-   where x = proj₂ init
+   where x = snd init
          xᴺ = nameOf x
 
  apTm : Tm ø
  apTm = ƛ x (ƛ y (V xᴺ · V yᴺ))
-   where x = proj₂ init
-         y = proj₂ (next init)
+   where x = snd init
+         y = snd (next init)
          xᴺ = weaken y (nameOf x)
          yᴺ = nameOf y
 
@@ -263,7 +263,7 @@ module LC _↪_ {link : Link _↪_} (flink : FreshLink link) where
  SubstEnv α β = Fresh β × (Name α → Tm β)
 
  substKit : TrKit SubstEnv Tm
- substKit = mk proj₂ comm
+ substKit = mk snd comm
    where
      importFunTm : ∀ {α β γ δ} → α ↪ γ → β ↪ δ → (Name α → Tm β)
                                                       → (Name γ → Tm δ)
@@ -314,7 +314,7 @@ module FreshStream _↪_ {link : Link _↪_} (flink : FreshLink link) where
     _∷_ : ∀ {β} (ℓ : α ↪ β) (tl : ∞ (FreshStream β)) → FreshStream α
 
   enumFrom : ∀ {α} → Fresh α → FreshStream α
-  enumFrom ℓ = proj₂ ℓ ∷ ♯ (enumFrom (next ℓ))
+  enumFrom ℓ = snd ℓ ∷ ♯ (enumFrom (next ℓ))
 
   freshStream : FreshStream ø
   freshStream = enumFrom init
@@ -360,7 +360,7 @@ freshLink = mk freshL (λ _ → freshL)
 dbL : ∀ {α} → L α (α ↑1)
 dbL = mk sucᴺ↑ predᴺ? zeroᴺ
 -- or dbL = linkL DeBruijn.deBruijnLinks ≡.refl
--- or dbL = proj₂ freshL
+-- or dbL = snd freshL
 
 nomL : ∀ {α b} → b # α → L α (b ◅ α)
 nomL b# = linkL nomLinks ((_ , b#) , ≡.refl)

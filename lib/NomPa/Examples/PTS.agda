@@ -5,7 +5,7 @@ open import Category.Applicative renaming (module RawApplicative to Applicative;
 open import  Data.List using (List; []; _∷_; map)
 open import  Data.Bool
 open import  Data.Maybe.NP using (Maybe; nothing; just; maybe; maybe′; applicative)
-open import  Data.Product using (_×_; _,_ ; proj₁ ; proj₂)
+open import  Data.Product.NP using (_×_; _,_ ; fst ; snd)
 open import  Data.Star using (Star; ε) renaming (_◅_ to _∷_)
 open import  Function.NP
 open import  Relation.Nullary

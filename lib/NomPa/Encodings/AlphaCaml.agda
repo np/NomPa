@@ -3,7 +3,7 @@ import NomPa.Derived.NaPa
 import NomPa.Encodings.NominalTypes
 open import NomPa.Record
 open import Function.NP
-open import Data.Product.NP using (_×_;∃;_,_;proj₁;proj₂)
+open import Data.Product.NP using (_×_;∃;_,_;fst;snd)
 open import Data.Sum
 open import Data.Nat
 open import Data.Empty
@@ -89,8 +89,8 @@ record _×ᵖ_ (P₁ P₂ : ℙ) α β Op : Set where
   constructor _,_
   field
     {Op-def} : Op ≡ Op₂ ∘ Op₁
-    proj₁ᵖ    : P₁ α β Op₁
-    proj₂ᵖ    : P₂ α β Op₂
+    fstᵖ    : P₁ α β Op₁
+    sndᵖ    : P₂ α β Op₂
 -}
 
 infixr 1 _⊎ᵖ_

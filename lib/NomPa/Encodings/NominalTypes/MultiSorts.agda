@@ -28,7 +28,8 @@ open NomPa.Derived.NaPa nomPa using (SynAbsᴰ)
 open NomPa.Traverse nomPa
 
 open Data.Indexed {_} {Sort → World}
-  using (Set°; pure°; liftA°; liftA2°; _→°_; _↦°_;
+  renaming (★° to Set°)
+  using (pure°; liftA°; liftA₂°; _→°_; _↦°_;
          List°; Maybe°)
 
 𝔼 : Set₁
@@ -50,7 +51,7 @@ Neutral1ᵉ : (Set → Set) → (𝔼 → 𝔼)
 Neutral1ᵉ = liftA°
 
 Neutral2ᵉ : (Set → Set → Set) → (𝔼 → 𝔼 → 𝔼)
-Neutral2ᵉ = liftA2°
+Neutral2ᵉ = liftA₂°
 
 infixr 0 _→ᵉ_
 infixr 0 _↦ᵉ_
