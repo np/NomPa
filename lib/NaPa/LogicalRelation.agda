@@ -12,6 +12,7 @@ open import Data.Empty
 open import Data.Unit
 open import Data.Maybe.NP
 open import Data.Bool.NP hiding (_==_)
+open import Data.Two.Logical
 open import Data.Sum.NP
 open import Data.Product.NP
 import Relation.Binary.PropositionalEquality as ≡
@@ -38,14 +39,14 @@ _⟨$⟩ᵢ_ : ∀ {f₁ f₂ t₁ t₂}
          → Injection From To → Setoid.Carrier From → Setoid.Carrier To
 _⟨$⟩ᵢ_ = ⟶≡._⟨$⟩_ ∘ Inj.to -- inj x = Inj.to inj ⟨$⟩ x
 
-==ℕ-dec : ∀ x y → ⟦Bool⟧ ⌊ x ≟ℕ y ⌋ (x ==ℕ y)
+==ℕ-dec : ∀ x y → ⟦𝟚⟧ ⌊ x ≟ℕ y ⌋ (x ==ℕ y)
 ==ℕ-dec x y with x ≟ℕ y
-... | yes p = ⟦true⟧′  (==ℕs.reflexive (ℕe.to-propositional p))
-... | no ¬p = ⟦false⟧′ (T'¬'not (¬p ∘ ℕs.reflexive ∘ ==ℕ.sound _ _))
+... | yes p = ⟦1₂⟧′ (==ℕs.reflexive (ℕe.to-propositional p))
+... | no ¬p = ⟦0₂⟧′ (T'¬'not (¬p ∘ ℕs.reflexive ∘ ==ℕ.sound _ _))
 
-⟦dec⟧ : ∀ {P Q : Set} (decP : Dec P) (decQ : Dec Q) → (P → Q) → (Q → P) → ⟦Bool⟧ ⌊ decP ⌋ ⌊ decQ ⌋
-⟦dec⟧ (yes _) (yes _) _ _ = ⟦true⟧
-⟦dec⟧ (no  _) (no  _) _ _ = ⟦false⟧
+⟦dec⟧ : ∀ {P Q : Set} (decP : Dec P) (decQ : Dec Q) → (P → Q) → (Q → P) → ⟦𝟚⟧ ⌊ decP ⌋ ⌊ decQ ⌋
+⟦dec⟧ (yes _) (yes _) _ _ = ⟦1₂⟧
+⟦dec⟧ (no  _) (no  _) _ _ = ⟦0₂⟧
 ⟦dec⟧ (yes p) (no ¬q) f _ = ⊥-elim (¬q (f p))
 ⟦dec⟧ (no ¬p) (yes q) _ g = ⊥-elim (¬p (g q))
 
@@ -97,9 +98,9 @@ _⟦+ᵂ⟧_ αᵣ (suc k) = (αᵣ ⟦+ᵂ⟧ k) ⟦+1⟧
 ⟦ø⟧ = record { to = Name→-to-Nm⟶ Nameø-elim
              ; injective = λ{x} → Nameø-elim x }
 
-_⟦==ᴺ⟧_ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦Bool⟧) _==ᴺ_ _==ᴺ_
+_⟦==ᴺ⟧_ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦𝟚⟧) _==ᴺ_ _==ᴺ_
 _⟦==ᴺ⟧_ αᵣ {_} {x₂} xᵣ {_} {y₂} yᵣ = helper (≡ᴺ⇒≡ {_} {_} {x₂} xᵣ) (≡ᴺ⇒≡ {_} {_} {y₂} yᵣ) where
-  helper : (⟦Name⟧≡ αᵣ ⟦→⟧ ⟦Name⟧≡ αᵣ ⟦→⟧ ⟦Bool⟧) _==ᴺ_ _==ᴺ_
+  helper : (⟦Name⟧≡ αᵣ ⟦→⟧ ⟦Name⟧≡ αᵣ ⟦→⟧ ⟦𝟚⟧) _==ᴺ_ _==ᴺ_
   helper {x} ≡.refl {y} ≡.refl =
        x ==ᴺ y       ≈⟨ sym (==ℕ-dec _ _) ⟩
        ⌊ x ≟ᴺ y ⌋   ≈⟨ ⟦dec⟧ (x ≟ᴺ y) (x′ ≟ᴺ y′) (⟶≡.cong (Inj.to αᵣ)) (Inj.injective αᵣ) ⟩
@@ -108,8 +109,8 @@ _⟦==ᴺ⟧_ αᵣ {_} {x₂} xᵣ {_} {y₂} yᵣ = helper (≡ᴺ⇒≡ {_} {
     where
       x′ = αᵣ ⟨$⟩ᵢ x
       y′ = αᵣ ⟨$⟩ᵢ y
-      open ⟦Bool⟧-Props using (sym)
-      open ⟦Bool⟧-Reasoning
+      open ⟦𝟚⟧-Props using (sym)
+      open ⟦𝟚⟧-Reasoning
 
 ⟦zeroᴺ⟧ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ (αᵣ ⟦↑1⟧)) zeroᴺ zeroᴺ
 ⟦zeroᴺ⟧ _ = zero
@@ -145,11 +146,11 @@ _⟦==ᴺ⟧_ αᵣ {_} {x₂} xᵣ {_} {y₂} yᵣ = helper (≡ᴺ⇒≡ {_} {
       name x₂ ∸ suc k₂
    ∎ where open ⟦ℕ⟧-Reasoning
 
-⟦cmpᴺ-bool⟧ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟨ kᵣ ∶ ⟦ℕ⟧ ⟩⟦→⟧ ⟦Name⟧ (αᵣ ⟦↑ kᵣ ⟧) ⟦→⟧ ⟦Bool⟧) cmpᴺ-bool cmpᴺ-bool
+⟦cmpᴺ-bool⟧ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟨ kᵣ ∶ ⟦ℕ⟧ ⟩⟦→⟧ ⟦Name⟧ (αᵣ ⟦↑ kᵣ ⟧) ⟦→⟧ ⟦𝟚⟧) cmpᴺ-bool cmpᴺ-bool
 ⟦cmpᴺ-bool⟧ αᵣ kᵣ {x₁} {x₂} xᵣ = helper kᵣ {x₁} {x₂} (≡ᴺ⇒≡ xᵣ) where
-  helper : (⟨ kᵣ ∶ ⟦ℕ⟧ ⟩⟦→⟧ ⟦Name⟧≡ (αᵣ ⟦↑ kᵣ ⟧) ⟦→⟧ ⟦Bool⟧) cmpᴺ-bool cmpᴺ-bool
-  helper zero                   ≡.refl  = ⟦false⟧
-  helper (suc kᵣ) {zero  , _ }  ≡.refl  = ⟦true⟧
+  helper : (⟨ kᵣ ∶ ⟦ℕ⟧ ⟩⟦→⟧ ⟦Name⟧≡ (αᵣ ⟦↑ kᵣ ⟧) ⟦→⟧ ⟦𝟚⟧) cmpᴺ-bool cmpᴺ-bool
+  helper zero                   ≡.refl  = ⟦0₂⟧
+  helper (suc kᵣ) {zero  , _ }  ≡.refl  = ⟦1₂⟧
   helper (suc kᵣ) {suc x , pf₁} ≡.refl  = helper kᵣ {x , pf₁} ≡.refl
 
 ⟦easy-cmpᴺ⟧ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟨ kᵣ ∶ ⟦ℕ⟧ ⟩⟦→⟧

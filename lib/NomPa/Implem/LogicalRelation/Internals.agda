@@ -1,10 +1,12 @@
 {-# OPTIONS --universe-polymorphism #-}
 import Level as L
 open import Data.Nat.Logical
-open import Data.Bool.NP hiding (_==_)
+open import Data.Two hiding (_==_)
+open import Data.Two.Logical
 open import Data.Unit
 open import Data.Empty
 open import Data.Sum.NP
+open import Data.Sum.Logical
 open import Data.Maybe.NP
 open import Data.List
 open import Data.Product.NP
@@ -38,8 +40,8 @@ open NomPa NomPa.Implem.nomPa using (worldSym; Nameø-elim; sucᴺ; sucᴺ↑)
 predᴺ : ∀ {α} → Name (α +1) → Name α
 predᴺ = subtractᴺ 1
 
-≢→T'not'==ℕ : ∀ {x y} → x ≢ y → T (not (x ==ℕ y))
-≢→T'not'==ℕ ¬p = T'¬'not (¬p ∘ ℕ.==.sound _ _)
+≢→✓-not-==ℕ : ∀ {x y} → x ≢ y → ✓ (not (x ==ℕ y))
+≢→✓-not-==ℕ ¬p = ✓-¬-not (¬p ∘ ℕ.==.sound _ _)
 
 #⇒∉ : ∀ {α b} → b # α → b ∉ α
 #⇒∉ (_ #ø)      = id
@@ -64,34 +66,34 @@ pf-irr ℛ = pf-irr′ ℛ ≡.refl ≡.refl
 Preserve-≈ : ∀ {a b ℓ ℓa ℓb} {A : Set a} {B : Set b} → Rel A ℓa → Rel (B) ℓb → REL A (B) ℓ → Set _
 Preserve-≈ _≈a_ _≈b_ _∼_ = ∀ {x₁ x₂ y₁ y₂} → x₁ ∼ x₂ → y₁ ∼ y₂ → (x₁ ≈a y₁) ⇔ (x₂ ≈b y₂)
 
-==ℕ⇔≡ : ∀ {x y} → T (x ==ℕ y) ⇔ x ≡ y
+==ℕ⇔≡ : ∀ {x y} → ✓ (x ==ℕ y) ⇔ x ≡ y
 ==ℕ⇔≡ {x} {y} = equivalence (ℕ.==.sound _ _) ℕ.==.reflexive
 
 ≡-on-name⇔≡ : ∀ {α} {x y : Name α} → binderᴺ x ≡ binderᴺ y ⇔ x ≡ y
 ≡-on-name⇔≡ {α} {x} {y} = equivalence binderᴺ-injective (≡.cong binderᴺ)
 
-T⇔T→≡ : ∀ {b₁ b₂} → T b₁ ⇔ T b₂ → b₁ ≡ b₂
-T⇔T→≡ {true} {true} b₁⇔b₂ = ≡.refl
-T⇔T→≡ {true} {false} b₁⇔b₂ = ⊥-elim (Equivalence.to b₁⇔b₂ ⟨$⟩ _)
-T⇔T→≡ {false} {true} b₁⇔b₂ = ⊥-elim (Equivalence.from b₁⇔b₂ ⟨$⟩ _)
-T⇔T→≡ {false} {false} b₁⇔b₂ = ≡.refl
+T⇔T→≡ : ∀ {b₁ b₂} → ✓ b₁ ⇔ ✓ b₂ → b₁ ≡ b₂
+T⇔T→≡ {1₂} {1₂} b₁⇔b₂ = ≡.refl
+T⇔T→≡ {1₂} {0₂} b₁⇔b₂ = ⊥-elim (Equivalence.to b₁⇔b₂ ⟨$⟩ _)
+T⇔T→≡ {0₂} {1₂} b₁⇔b₂ = ⊥-elim (Equivalence.from b₁⇔b₂ ⟨$⟩ _)
+T⇔T→≡ {0₂} {0₂} b₁⇔b₂ = ≡.refl
 
-==ᴺ⇔≡ : ∀ {α} {x y : Name α} → T (x ==ᴺ y) ⇔ x ≡ y
+==ᴺ⇔≡ : ∀ {α} {x y : Name α} → ✓ (x ==ᴺ y) ⇔ x ≡ y
 ==ᴺ⇔≡ = ≡-on-name⇔≡ ⟨∘⟩ ==ℕ⇔≡ where open ⇔ renaming (_∘_ to _⟨∘⟩_)
 
 -- Preserving the equalities also mean that the relation is functional and injective
 Preserve-≡ : ∀ {a b ℓ} {A : Set a} {B : Set b} → REL A (B) ℓ → Set _
 Preserve-≡ _∼_ = Preserve-≈ _≡_ _≡_ _∼_
 
-exportᴺ?-nothing : ∀ {b α} (x : Name (b ◅ α)) → T (binderᴺ x ==ℕ b) → exportᴺ? {b} x ≡ nothing
+exportᴺ?-nothing : ∀ {b α} (x : Name (b ◅ α)) → ✓ (binderᴺ x ==ℕ b) → exportᴺ? {b} x ≡ nothing
 exportᴺ?-nothing {b} {α} (x , x∈) p with x ==ℕ b | export∈ α x b
-... | true  | _ = ≡.refl
-... | false | _ = ⊥-elim p
+... | 1₂ | _ = ≡.refl
+... | 0₂ | _ = ⊥-elim p
 
-exportᴺ?-just : ∀ {α b} (x : Name (b ◅ α)) {x∈} → T (not (binderᴺ x ==ℕ b)) → exportᴺ? {b} x ≡ just (binderᴺ x , x∈)
+exportᴺ?-just : ∀ {α b} (x : Name (b ◅ α)) {x∈} → ✓ (not (binderᴺ x ==ℕ b)) → exportᴺ? {b} x ≡ just (binderᴺ x , x∈)
 exportᴺ?-just {α} {b} (x , x∈) p with x ==ℕ b | export∈ α x b
-... | true  | _ = ⊥-elim p
-... | false | _ = ≡.cong just (binderᴺ-injective ≡.refl)
+... | 1₂ | _ = ⊥-elim p
+... | 0₂ | _ = ≡.cong just (binderᴺ-injective ≡.refl)
 
 record ⟦World⟧ (α₁ α₂ : World) : Set₁ where
   constructor _,_
@@ -106,7 +108,7 @@ record ⟦World⟧ (α₁ α₂ : World) : Set₁ where
 
   ∼-∈-uniq : ∀ {x₁ x₂} {x₁∈′ x₂∈′} →
         x₁ ∼ x₂ ≡ (binderᴺ x₁ , x₁∈′) ∼ (binderᴺ x₂ , x₂∈′)
-  ∼-∈-uniq {_ , x₁∈} {_ , x₂∈} {x₁∈′} {x₂∈′} = ≡.cong₂ (λ x₁∈ x₂∈ → (_ , x₁∈) ∼ (_ , x₂∈)) (∈-uniq α₁ x₁∈ x₁∈′) (∈-uniq α₂ x₂∈ x₂∈′)
+  ∼-∈-uniq {_ , x₁∈} {_ , x₂∈} {x₁∈′} {x₂∈′} = ≡.ap₂ (λ x₁∈ x₂∈ → (_ , x₁∈) ∼ (_ , x₂∈)) (∈-uniq α₁ x₁∈ x₁∈′) (∈-uniq α₂ x₂∈ x₂∈′)
 
 ⟦sym⟧ : ∀ {α₁ α₂} → ⟦World⟧ α₁ α₂ → ⟦World⟧ α₂ α₁
 ⟦sym⟧ (ℛ , ℛ-pres-≡) = ℛ-sym , ℛ-sym-pres-≡
@@ -162,9 +164,9 @@ _⟦◅⟧_ {b₁} {b₂} _ αᵣ = ⟦◅⟧.⟦world⟧ b₁ b₂ αᵣ
 ⟦ø⟧ : ⟦World⟧ ø ø
 ⟦ø⟧ = (λ _ _ → ⊥) , (λ())
 
-_⟦==ᴺ⟧_ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦Bool⟧) _==ᴺ_ _==ᴺ_
+_⟦==ᴺ⟧_ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦𝟚⟧) _==ᴺ_ _==ᴺ_
 _⟦==ᴺ⟧_ αᵣ xᵣ yᵣ =
-   ⟦Bool⟧-Props.reflexive (T⇔T→≡ (sym ==ᴺ⇔≡ ⟨∘⟩ ∼-pres-≡ xᵣ yᵣ ⟨∘⟩ ==ᴺ⇔≡)) where
+   ⟦𝟚⟧-Props.reflexive (T⇔T→≡ (sym ==ᴺ⇔≡ ⟨∘⟩ ∼-pres-≡ xᵣ yᵣ ⟨∘⟩ ==ᴺ⇔≡)) where
   open ⟦World⟧ αᵣ
   open ⇔ using (sym) renaming (_∘_ to _⟨∘⟩_)
 
@@ -186,8 +188,8 @@ _⟦==ᴺ⟧_ αᵣ xᵣ yᵣ =
 ⟦exportᴺ?⟧ _ αᵣ {x₁} {x₂} (⟦◅⟧.here e₁ e₂)
   = ⟦nothing⟧′ (exportᴺ?-nothing x₁ (ℕ.==.reflexive e₁)) (exportᴺ?-nothing x₂ (ℕ.==.reflexive e₂))
 ⟦exportᴺ?⟧ _ αᵣ {x₁} {x₂} (⟦◅⟧.there x₁≢b₁ x₂≢b₂ x₁∼x₂)
-  = ⟦just⟧′ (exportᴺ?-just x₁ (≢→T'not'==ℕ x₁≢b₁))
-           (exportᴺ?-just x₂ (≢→T'not'==ℕ x₂≢b₂)) x₁∼x₂
+  = ⟦just⟧′ (exportᴺ?-just x₁ (≢→✓-not-==ℕ x₁≢b₁))
+           (exportᴺ?-just x₂ (≢→✓-not-==ℕ x₂≢b₂)) x₁∼x₂
 
 _⟦⊆⟧b_ : ⟦Rel⟧ ⟦World⟧ L.zero _⊆_ _⊆_
 _⟦⊆⟧b_ αᵣ βᵣ x y = (⟦Name⟧ αᵣ ⟦→⟧ ⟦Name⟧ βᵣ) (coerceᴺ x) (coerceᴺ y)
@@ -355,12 +357,12 @@ _⟦+ᵂ⟧_ αᵣ (suc k) = (αᵣ ⟦+ᵂ⟧ k) ⟦+1⟧
 ¬⟦Name⟧-αᵣ-⟦↑1⟧-suc-0 _ (⟦◅⟧.there _ p _) = p ≡.refl
 ¬⟦Name⟧-αᵣ-⟦↑1⟧-suc-0 _ (⟦◅⟧.here () _)
 
--- cmpᴺ-bool : ∀ {α} ℓ → Name (α ↑ ℓ) → Bool
+-- cmpᴺ-bool : ∀ {α} ℓ → Name (α ↑ ℓ) → 𝟚
 -- cmpᴺ-bool ℓ x = suc (binderᴺ x) <= ℓ
 
-⟦cmpᴺ-bool⟧ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟨ kᵣ ∶ ⟦ℕ⟧ ⟩⟦→⟧ ⟦Name⟧ (αᵣ ⟦↑⟧ kᵣ) ⟦→⟧ ⟦Bool⟧) NaPa.cmpᴺ-bool NaPa.cmpᴺ-bool
-⟦cmpᴺ-bool⟧ _ zero _ = ⟦false⟧
-⟦cmpᴺ-bool⟧ _ (suc _) {zero , _} {zero , _} _ = ⟦true⟧
+⟦cmpᴺ-bool⟧ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟨ kᵣ ∶ ⟦ℕ⟧ ⟩⟦→⟧ ⟦Name⟧ (αᵣ ⟦↑⟧ kᵣ) ⟦→⟧ ⟦𝟚⟧) NaPa.cmpᴺ-bool NaPa.cmpᴺ-bool
+⟦cmpᴺ-bool⟧ _ zero _ = ⟦0₂⟧
+⟦cmpᴺ-bool⟧ _ (suc _) {zero , _} {zero , _} _ = ⟦1₂⟧
 ⟦cmpᴺ-bool⟧ αᵣ (suc kᵣ) {suc _ , _} {suc _ , _} xᵣ = ⟦cmpᴺ-bool⟧ αᵣ kᵣ (⟦predᴺ⟧-sucᴺ↑ (αᵣ ⟦↑⟧ kᵣ) xᵣ)
 ⟦cmpᴺ-bool⟧ αᵣ (suc kᵣ) {zero , _} {suc _ , _} xᵣ = ⊥-elim (¬⟦Name⟧-αᵣ-⟦↑1⟧-0-suc (αᵣ ⟦↑⟧ kᵣ) xᵣ)
 ⟦cmpᴺ-bool⟧ αᵣ (suc kᵣ) {suc _ , _} {zero , _} xᵣ = ⊥-elim (¬⟦Name⟧-αᵣ-⟦↑1⟧-suc-0 (αᵣ ⟦↑⟧ kᵣ) xᵣ)
@@ -368,8 +370,8 @@ _⟦+ᵂ⟧_ αᵣ (suc k) = (αᵣ ⟦+ᵂ⟧ k) ⟦+1⟧
 ⟦easy-cmpᴺ⟧ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟨ kᵣ ∶ ⟦ℕ⟧ ⟩⟦→⟧
                   ⟦Name⟧ (αᵣ ⟦↑⟧ kᵣ) ⟦→⟧ ⟦Name⟧ (⟦ø⟧ ⟦↑⟧ kᵣ) ⟦⊎⟧ ⟦Name⟧ (αᵣ ⟦+ᵂ⟧ kᵣ)
              ) NaPa.easy-cmpᴺ NaPa.easy-cmpᴺ
-⟦easy-cmpᴺ⟧ _ zero xᵣ = inj₂ xᵣ
-⟦easy-cmpᴺ⟧ _ (suc _) {zero , _} {zero , _} xᵣ = inj₁ here′
+⟦easy-cmpᴺ⟧ _ zero xᵣ = ⟦inr⟧ xᵣ
+⟦easy-cmpᴺ⟧ _ (suc _) {zero , _} {zero , _} xᵣ = ⟦inl⟧ here′
 ⟦easy-cmpᴺ⟧ αᵣ (suc kᵣ) {suc _ , _} {suc _ , _} xᵣ = ⟦map⟧ _ _ _ _ (⟦sucᴺ↑⟧ (⟦ø⟧ ⟦↑⟧ kᵣ)) (pf-irr (⟦Name⟧ (αᵣ ⟦+ᵂ⟧ kᵣ))) (⟦easy-cmpᴺ⟧ αᵣ kᵣ (⟦predᴺ⟧-sucᴺ↑ (αᵣ ⟦↑⟧ kᵣ) xᵣ))
 ⟦easy-cmpᴺ⟧ αᵣ (suc kᵣ) {zero , _} {suc _ , _} xᵣ = ⊥-elim (¬⟦Name⟧-αᵣ-⟦↑1⟧-0-suc (αᵣ ⟦↑⟧ kᵣ) xᵣ)
 ⟦easy-cmpᴺ⟧ αᵣ (suc kᵣ) {suc _ , _} {zero , _} xᵣ = ⊥-elim (¬⟦Name⟧-αᵣ-⟦↑1⟧-suc-0 (αᵣ ⟦↑⟧ kᵣ) xᵣ)
@@ -452,17 +454,17 @@ module Perm (m n : ℕ) (m≢n : m ≢ n) where
   n-m : ∀ {m∈ n∈} → ⟦Name⟧ perm-m-n (n , n∈) (m , m∈)
   n-m = ⟦◅⟧.there (m≢n ∘ ≡.sym) m≢n {b∈b◅ n ø} {b∈b◅ m ø} here′
 
-¬⟦Bool⟧-true-false : ¬(⟦Bool⟧ true false)
-¬⟦Bool⟧-true-false ()
+¬⟦𝟚⟧-1₂-0₂ : ¬(⟦𝟚⟧ 1₂ 0₂)
+¬⟦𝟚⟧-1₂-0₂ ()
 
-binder-irrelevance : ∀ (f : Binder → Bool)
-                     → (⟦Binder⟧ ⟦→⟧ ⟦Bool⟧) f f
+binder-irrelevance : ∀ (f : Binder → 𝟚)
+                     → (⟦Binder⟧ ⟦→⟧ ⟦𝟚⟧) f f
                      → ∀ {b₁ b₂} → f b₁ ≡ f b₂
-binder-irrelevance _ fᵣ = ⟦Bool⟧-Props.to-propositional (fᵣ _)
+binder-irrelevance _ fᵣ = ⟦𝟚⟧-Props.to-propositional (fᵣ _)
 
-contrab : ∀ (f : Binder → Bool) {b₁ b₂}
+contrab : ∀ (f : Binder → 𝟚) {b₁ b₂}
           → f b₁ ≢ f b₂
-          → ¬((⟦Binder⟧ ⟦→⟧ ⟦Bool⟧) f f)
+          → ¬((⟦Binder⟧ ⟦→⟧ ⟦𝟚⟧) f f)
 contrab f = contraposition (λ fᵣ → binder-irrelevance f (λ xᵣ → fᵣ xᵣ))
 
 module Single α₁ α₂ x₁ x₂ where
@@ -473,26 +475,26 @@ module Single α₁ α₂ x₁ x₂ where
   αᵣ : ⟦World⟧ α₁ α₂
   αᵣ = ℛ , ℛ-pres-≡
 
-poly-name-uniq : ∀ (f : ∀ {α} → Name α → Bool)
-                          (fᵣ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦Bool⟧) f f)
+poly-name-uniq : ∀ (f : ∀ {α} → Name α → 𝟚)
+                          (fᵣ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦𝟚⟧) f f)
                           {α} (x : Name α) → f x ≡ f {ø ↑1} (0 , _)
 poly-name-uniq f fᵣ {α} x =
-  ⟦Bool⟧-Props.to-propositional (fᵣ {α} {ø ↑1} αᵣ {x} {0 , _} refl)
+  ⟦𝟚⟧-Props.to-propositional (fᵣ {α} {ø ↑1} αᵣ {x} {0 , _} refl)
   where open Single α (ø ↑1) x (0 , _)
 
-poly-name-irrelevance : ∀ (f : ∀ {α} → Name α → Bool)
-                          (fᵣ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦Bool⟧) f f)
+poly-name-irrelevance : ∀ (f : ∀ {α} → Name α → 𝟚)
+                          (fᵣ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦𝟚⟧) f f)
                           {α₁ α₂} (x₁ : Name α₁) (x₂ : Name α₂)
                         → f x₁ ≡ f x₂
 poly-name-irrelevance f fᵣ x₁ x₂ =
   ≡.trans (poly-name-uniq f fᵣ x₁) (≡.sym (poly-name-uniq f fᵣ x₂))
 
 module Broken where
-  _<=ᴺ_ : ∀ {α} → Name α → Name α → Bool
+  _<=ᴺ_ : ∀ {α} → Name α → Name α → 𝟚
   (m , _) <=ᴺ (n , _) = ℕ._<=_ m n
 
-  ¬⟦<=ᴺ⟧ : ¬((∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦Bool⟧) _<=ᴺ_ _<=ᴺ_)
-  ¬⟦<=ᴺ⟧ ⟦<=⟧ = ¬⟦Bool⟧-true-false (⟦<=⟧ perm-0-1 {0 , _} {1 , _} 0-1 {1 , _} {0 , _} 1-0)
+  ¬⟦<=ᴺ⟧ : ¬((∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦𝟚⟧) _<=ᴺ_ _<=ᴺ_)
+  ¬⟦<=ᴺ⟧ ⟦<=⟧ = ¬⟦𝟚⟧-1₂-0₂ (⟦<=⟧ perm-0-1 {0 , _} {1 , _} 0-1 {1 , _} {0 , _} 1-0)
      where open Perm 0 1 (λ()) renaming (perm-m-n to perm-0-1; m-n to 0-1; n-m to 1-0)
 
   ⊆-broken : ∀ α b → α ⊆ (b ◅ α)

@@ -4,8 +4,9 @@ module NomPa.Record.LogicalRelation where
 open import NomPa.Record
 open import Relation.Binary.Logical
 open import Relation.Binary.PropositionalEquality.NP
-open import Data.Bool.NP
+open import Data.Two.Logical
 open import Data.Sum.NP
+open import Data.Sum.Logical
 open import Data.Maybe.NP
 open import Data.Nat.Logical
 open import NomPa.Worlds
@@ -53,7 +54,7 @@ record ⟦NomPa⟧ ℓ (nomPa₁ nomPa₂ : NomPa) : Set (L.suc ℓ) where
   ⟦¬Nameø⟧ : (⟦¬⟧(⟦Name⟧ ⟦ø⟧)) N₁.¬Nameø N₂.¬Nameø
 
   -- Names are comparable and exportable
-  _⟦==ᴺ⟧_ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦Bool⟧) N₁._==ᴺ_ N₂._==ᴺ_
+  _⟦==ᴺ⟧_ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦Name⟧ αᵣ ⟦→⟧ ⟦𝟚⟧) N₁._==ᴺ_ N₂._==ᴺ_
   ⟦exportᴺ?⟧ : (∀⟨ bᵣ ∶ ⟦Binder⟧ ⟩⟦→⟧ ∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ (bᵣ ⟦◅⟧ αᵣ) ⟦→?⟧ ⟦Name⟧ αᵣ) N₁.exportᴺ? N₂.exportᴺ?
 
   -- The fresh-for relation
@@ -153,10 +154,8 @@ record ⟦NomPa⟧ ℓ (nomPa₁ nomPa₂ : NomPa) : Set (L.suc ℓ) where
  ⟦zeroᴺ⟧ αᵣ = _⟦ᴺ⟧ (αᵣ ⟦+1⟧) zero
 
  ⟦exportᴺ⟧ : (∀⟨ bᵣ ∶ ⟦Binder⟧ ⟩⟦→⟧ ∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ (bᵣ ⟦◅⟧ αᵣ) ⟦→⟧ ⟦Name⟧ (bᵣ ⟦◅⟧ ⟦ø⟧) ⟦⊎⟧ ⟦Name⟧ αᵣ) N₁.exportᴺ N₂.exportᴺ
- ⟦exportᴺ⟧ {b₁} {b₂} bᵣ αᵣ {x₁} {x₂} xᵣ = ⟦maybe⟧ (⟦Name⟧ αᵣ) (⟦Name⟧ (bᵣ ⟦◅⟧ ⟦ø⟧) ⟦⊎⟧ ⟦Name⟧ αᵣ)
-                                                {inj₂} {inj₂} inj₂
-                                                {inj₁ (N₁.nameᴮ b₁)} {inj₁ (N₂.nameᴮ b₂)} (inj₁ (⟦nameᴮ⟧ _ bᵣ))
-                                                (⟦exportᴺ?⟧ bᵣ αᵣ {x₁} {x₂} xᵣ)
+ ⟦exportᴺ⟧ bᵣ αᵣ xᵣ = ⟦maybe⟧ (⟦Name⟧ αᵣ) (⟦Name⟧ (bᵣ ⟦◅⟧ ⟦ø⟧) ⟦⊎⟧ ⟦Name⟧ αᵣ)
+                                       ⟦inr⟧ (⟦inl⟧ (⟦nameᴮ⟧ _ bᵣ)) (⟦exportᴺ?⟧ bᵣ αᵣ xᵣ)
 
  -- more derived stuff could be added here for completeness
 
