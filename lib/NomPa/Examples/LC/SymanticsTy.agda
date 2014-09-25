@@ -13,6 +13,10 @@ open import Category.Applicative
 module NomPa.Examples.LC.SymanticsTy
   where
 
+record Box {a} (A : Set a) : Set a where
+  constructor mk
+  field get : A
+
 module DataFunctorReader {E} where
   Reader : Set → Set
   Reader A = E → A
@@ -29,16 +33,21 @@ module BasicSyms (Repr : Set → Set) where
       add : Repr (ℕ → ℕ → ℕ)
       mul : Repr (ℕ → ℕ → ℕ)
 
+  AppSym' : Set₁
+  AppSym' = ∀ {A B : Set} → Repr (A → B) → Repr A → Repr B
+
   AppSym : Set₁
-  AppSym = ∀ {A B : Set} → Repr (A → B) → Repr A → Repr B
+  AppSym = Box AppSym'
 
   record SimpleSym : Set₁ where
     constructor mk
     infixl 2 _$$_
     field
       baseArithSym : BaseArithSym
-      _$$_         : AppSym
+      appSym       : AppSym
     open BaseArithSym baseArithSym public
+    _$$_ : AppSym'
+    _$$_ = Box.get appSym
     _+:_ : Repr ℕ → Repr ℕ → Repr ℕ
     x +: y = add $$ x $$ y
     _*:_ : Repr ℕ → Repr ℕ → Repr ℕ
@@ -46,7 +55,7 @@ module BasicSyms (Repr : Set → Set) where
 
   -- lamS in Staged Haskell
   LamPure : Set₁
-  LamPure = ∀ {A B} → (Repr A → Repr B) → Repr (A → B)
+  LamPure = Box (∀ {A B} → (Repr A → Repr B) → Repr (A → B))
 
   AssertPos : Set₁
   AssertPos = ∀ {A} → Repr ℕ → Repr A → Repr A
@@ -56,25 +65,26 @@ module IdSyms where
   baseArithSym : BaseArithSym
   baseArithSym = record { nat = id; add = _+_; mul = _*_ }
   _$$_ : AppSym
-  _$$_ = id
+  _$$_ = mk id
   simpleSym : SimpleSym
-  simpleSym = record { baseArithSym = baseArithSym; _$$_ = _$$_ }
+  simpleSym = record { baseArithSym = baseArithSym; appSym = _$$_ }
   ƛᴾ : LamPure
-  ƛᴾ = id
+  ƛᴾ = mk id
 
 module ApplicativeSyms {M Repr : Set → Set} (M-app : Applicative M) where
   open BasicSyms
   open Applicative M-app
 
-  baseArithSym : {{sym : BaseArithSym Repr}} → BaseArithSym (M ∘ Repr)
-  baseArithSym = record { nat = pure ∘ nat; add = pure add; mul = pure mul } where
-    open BaseArithSym _ …
+  instance
+    baseArithSym : {{sym : BaseArithSym Repr}} → BaseArithSym (M ∘ Repr)
+    baseArithSym = record { nat = pure ∘ nat; add = pure add; mul = pure mul } where
+      open BaseArithSym _ …
 
-  _$$_ : {{sym : AppSym Repr}} → AppSym (M ∘ Repr)
-  _$$_ {{_$$′_}} x y = pure _$$′_ ⊛ x ⊛ y
+  appSym : {{sym : AppSym Repr}} → AppSym (M ∘ Repr)
+  appSym {{mk appSym'}} = mk λ x y → pure appSym' ⊛ x ⊛ y
 
   simpleSym : {{sym : SimpleSym Repr}} → SimpleSym (M ∘ Repr)
-  simpleSym {{mk _ _}} = mk baseArithSym _$$_
+  simpleSym {{mk _ _}} = mk … appSym
 
   assertPos : {{_ : AssertPos Repr}} → AssertPos (M ∘ Repr)
   assertPos {{assertPos′}} nᴹ aᴹ = pure assertPos′ ⊛ nᴹ ⊛ aᴹ
@@ -201,7 +211,7 @@ module M3 where
             → M (HV H Repr (A → B))
 
   lam : LamM
-  lam {{M-fun}} {{sym}} {{ƛᴾ}} f = _<$>_ (λ body h → ƛᴾ (λ x → body (mk x , h))) (f {⊤} href) where
+  lam {{M-fun}} {{sym}} {{mk ƛᴾ}} f = _<$>_ (λ body h → ƛᴾ (λ x → body (mk x , h))) (f {⊤} href) where
     open SimpleSym _ sym
     open Functor M-fun
 
