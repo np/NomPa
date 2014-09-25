@@ -7,7 +7,7 @@ open import  Data.Bool
 open import  Data.Maybe.NP using (Maybe; nothing; just; maybe; maybe′; applicative)
 open import  Data.Product.NP using (_×_; _,_ ; fst ; snd)
 open import  Data.Star using (Star; ε) renaming (_◅_ to _∷_)
-open import  Function.NP
+open import  Function.NP hiding (Π)
 open import  Relation.Nullary
 open import  Relation.Nullary.Decidable hiding (map)
 open import  Relation.Binary hiding (_⇒_)
@@ -89,7 +89,7 @@ data Cx α : World → Set where
            → Cx α (b ◅ β)
 
 module Lookup where
-  open Applicative {L.zero} applicative
+  open Applicative {L.zero} (applicative _)
   lookup : ∀ {ω α} (x : Name α) (Γ : Cx ω α) → Maybe (Ty α)
   lookup x ε = nothing
   lookup x (Γ ,, b# ∶ τ) = coerceTm (⊆-# b#) <$> (exportWith (just τ) (λ x' → lookup x' Γ)) x
