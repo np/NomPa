@@ -16,7 +16,6 @@ open import Data.Sum.NP
 open import Data.Product.NP
 import Relation.Binary.PropositionalEquality as ≡
 open ≡ using (_≡_)
-open ≡.≡-Reasoning
 open import Relation.Nullary
 open import Relation.Nullary.Decidable
 open import Relation.Binary.NP
