@@ -273,6 +273,7 @@ module ⟦+1⟧ {α₁ α₂} (αᵣ : ⟦World⟧ α₁ α₂) where
                  (λ x₂=y₂ → ℛ+1-inj {x₁} {y₁} {x₂} x₁∼x₂ (≡.tr (λ y₂ → ℛ+1 y₁ y₂) (≡.sym x₂=y₂) y₁∼y₂))
 
 
+infix 21 _⟦+1⟧
 _⟦+1⟧ : (⟦World⟧ ⟦→⟧ ⟦World⟧) _+1 _+1
 _⟦+1⟧ αᵣ = ℛ+1 , ℛ+1-pres-≡ where open ⟦+1⟧ αᵣ
 

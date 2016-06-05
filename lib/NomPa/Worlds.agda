@@ -11,6 +11,7 @@ open import Relation.Nullary  using (¬_)
 open import Relation.Binary.PropositionalEquality as ≡
 
 record WorldSymantics (W : Set) : Set where
+  infix 21 _↑1 _+1
   field
     ø : W
     _↑1 _+1 : (α : W) → W
