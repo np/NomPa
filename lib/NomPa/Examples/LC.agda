@@ -19,7 +19,7 @@ open import Function.NP
 import Relation.Binary.PropositionalEquality as ≡
 open ≡ using (_≡_)
 open import Relation.Nullary
-open import Relation.Nullary.Decidable as Dec
+open import Relation.Nullary.Decidable
 import NomPa.Examples.Raw
 open import NomPa.Examples.Raw.Parser
 open import NomPa.Examples.Path
