@@ -1,5 +1,6 @@
 {-# OPTIONS --universe-polymorphism #-}
 import Level as L
+open import Data.Bool.NP
 open import Data.Nat.Logical
 open import Data.Two hiding (_==_)
 open import Data.Two.Logical
