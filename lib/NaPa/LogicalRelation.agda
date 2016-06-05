@@ -2,7 +2,6 @@
 module NaPa.LogicalRelation where
 
 import Level as L
-open import Abstractor
 open import Irrelevance
 open import Data.Nat.NP hiding (_⊔_) renaming (_+_ to _+ℕ_; _≤_ to _≤ℕ_; _≤?_ to _≤?ℕ_; _<_ to _<ℕ_
                                               ;module == to ==ℕ; _==_ to _==ℕ_)
