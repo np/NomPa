@@ -9,7 +9,7 @@ open ≡ using (_≡_; _≢_; _≗_; module ≗-Reasoning; module ≡-Reasoning)
 open import Data.Nat.NP as Nat using (ℕ; zero; suc; s≤s; z≤n; ≤-pred; pred; _<=_; module <=)
                             renaming (_+_ to _+ℕ_ ; _∸_ to _∸ℕ_ ; _==_ to _==ℕ_; ¬≤ to ¬≤ℕ;
                                       _<_ to _<ℕ_ ; _≤_ to _≤ℕ_; _≥_ to _≥ℕ_; _≤?_ to _≤?ℕ_)
-open import Data.Nat.Logical using (⟦ℕ⟧; zero; suc; ⟦ℕ⟧-setoid; ⟦ℕ⟧-equality; ⟦ℕ⟧-cong)
+open import Data.Nat.Logical using (⟦ℕ⟧; ⟦zero⟧; ⟦suc⟧; ⟦ℕ⟧-setoid; ⟦ℕ⟧-equality; ⟦ℕ⟧-cong)
                           renaming (_≟_ to _≟⟦ℕ⟧_)
 import Data.Nat.Properties as Nat
 open import Function

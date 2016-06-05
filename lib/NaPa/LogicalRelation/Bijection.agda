@@ -1,7 +1,7 @@
 module NaPa.LogicalRelation.Bijection where
 
 open import Data.Nat             using (zero; suc)
-open import Data.Nat.Logical     using (zero; suc)
+open import Data.Nat.Logical     using (⟦zero⟧; ⟦suc⟧)
 open import Function.Equality    using (_⟶_; _⟨$⟩_)
 open import Function.Injection   using (module Injection)
 open import Function.Surjection  using (Surjective)
@@ -16,8 +16,8 @@ _⟦↑1⟧-bij {α₁} {α₂} αᵣ αᵣ-bij = record { injective = injective
   from : Nm (α₂ ↑1) ⟶ Nm (α₁ ↑1)
   from = Name→-to-Nm⟶ (protect↑1 (_⟨$⟩_ (Bijective.from αᵣ-bij)))
   to-left-inv-from : to LeftInverseOf from
-  to-left-inv-from (zero ,  _)   = zero
-  to-left-inv-from (suc n , pfx) = suc (Bijective.right-inverse-of αᵣ-bij (n , pfx))
+  to-left-inv-from (zero ,  _)   = ⟦zero⟧
+  to-left-inv-from (suc n , pfx) = ⟦suc⟧ (Bijective.right-inverse-of αᵣ-bij (n , pfx))
   to-surj : Surjective to
   to-surj = record { from = from; right-inverse-of = to-left-inv-from }
 
@@ -28,6 +28,6 @@ _⟦+1⟧-bij {α₁} {α₂} αᵣ αᵣ-bij = record { injective = injective; 
   from = Name→-to-Nm⟶ (λ x → sucᴺ (Bijective.from αᵣ-bij ⟨$⟩ (predᴺ x)))
   to-left-inv-from : to LeftInverseOf from
   to-left-inv-from (zero  , ())
-  to-left-inv-from (suc n , p) = suc (Bijective.right-inverse-of αᵣ-bij (n , p))
+  to-left-inv-from (suc n , p) = ⟦suc⟧ (Bijective.right-inverse-of αᵣ-bij (n , p))
   sur : Surjective to
   sur = record { from = from; right-inverse-of = to-left-inv-from }
