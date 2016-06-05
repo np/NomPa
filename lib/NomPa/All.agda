@@ -59,7 +59,7 @@ import NomPa.Examples.LocallyNamed
 
 -- More examples
 import NomPa.Examples.LC.Maybe
-import NomPa.Examples.LC.SymanticsTy
+--import NomPa.Examples.LC.SymanticsTy
 import NomPa.Examples.LC.Tests
 import NomPa.Examples.LocallyClosed
 import NomPa.Examples.PTS
