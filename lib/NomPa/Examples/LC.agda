@@ -517,7 +517,7 @@ module Conv-Tmᴿ⇒Tm where
   ! : ∀ {α} → Env α → Tmᴿ → Tm α
   ! Δ (V x) = V (trName Δ x)
   ! Δ (ƛ b t) = ƛ _ (! (extEnv b Δ) t)
-  ! Δ (t · u) = ! Δ t · ! Δ u
+  ! Δ (t Tmᴿ.· u) = ! Δ t Tm.· ! Δ u
 
   convø? : Tmᴿ →? Tm ø
   convø? = closeTm? ∘ ! emptyEnv

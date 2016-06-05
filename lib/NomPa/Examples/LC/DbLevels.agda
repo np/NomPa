@@ -264,7 +264,7 @@ module Tmᴿ⇒Tmᴸ (Atm : Set) (_==ᴬ_ : (x y : Atm) → Bool) where
   ! : ∀ {α s} → Env s α → Tmᴿ → Tmᴸ s α
   ! Δ (V x) = V (trᴬ Δ x)
   ! Δ (ƛ bᴬ t) = ƛ (! (extEnv bᴬ Δ) t)
-  ! Δ (t · u) = ! Δ t · ! Δ u
+  ! Δ (t Tmᴿ.· u) = ! Δ t Tmᴸ.· ! Δ u
 
   conv : ∀ {α} k → (Atm → Name α) → (k ᴮ) # α → Tmᴿ → Tmᴸ (k ᴮ) α
   conv _ trˢ k# = ! (trˢ , k#)

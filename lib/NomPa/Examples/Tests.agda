@@ -33,13 +33,14 @@ module LNom = NomPa.Examples.LocallyNamed nomPa
 module LL   = NomPa.Examples.LL nomPa
 module LCᴰ  = NomPa.Examples.NaPa.LC nomPa
 module LCᴺ  = NomPa.Examples.LC nomPa Data.Empty.⊥ (λ())
-open LCᴺ using (ƛ; V; _·_; Let; V₁)
+open LCᴺ using (ƛ; V; Let; V₁)
          renaming (Tm to Tmᴺ; showTmø to showTmøᴺ; parseTmø to parseTmᴺø;
                    parseTm to parseTmᴺ;
                    β-red to β-redᴺ;
-                   TmOk to TmᴺOk; TmøOk to TmøᴺOk)
+                   TmOk to TmᴺOk; TmøOk to TmøᴺOk;
+                   _·_ to _·ᴺ_)
 -- NomPa.Examples.LC.Contexts ... renaming (focus? to focusᴺ?; defocus to defocusᴺ;
-open LL using (Vᴬ; Vᴺ; ƛ; Let; _·_) renaming (openSubstTm to openSubstTmᴸ)
+open LL using (Vᴬ; Vᴺ; ƛ; Let) renaming (openSubstTm to openSubstTmᴸ; _·_ to _·ᴸ_)
 module LCᴸ  = NomPa.Examples.LC.DbLevels nomPa Data.Empty.⊥ (λ()) (λ())
 open ≡ using (_≡_)
 
@@ -47,7 +48,7 @@ open ≡ using (_≡_)
   -- test₂ : openSubstTmᴸ (Vᴬ (42 ᴬ)) (3 ᴮ , ƛ (4 ᴮ , Vᴺ (4 ᴺ) · Vᴺ (coerceᴺ (⊆-# (suc# (0 ᴮ #ø))) (3 ᴺ)))) ≡ ƛ (Vᴺ (0 ᴺ) · Vᴬ (42 ᴬ))
 test₁ : openSubstTmᴸ (Vᴬ (42 ᴬ)) (Vᴺ (0 ᴺ′)) ≡ Vᴬ (42 ᴬ)
 test₁ = ≡.refl
-test₂ : openSubstTmᴸ (Vᴬ (42 ᴬ)) (ƛ (Vᴺ (1 ᴺ′) · Vᴺ (coerceᴺ (⊆-# (suc# (0 ᴮ #ø))) (0 ᴺ′)))) ≡ ƛ (Vᴺ (0 ᴺ′) · Vᴬ (42 ᴬ))
+test₂ : openSubstTmᴸ (Vᴬ (42 ᴬ)) (ƛ (Vᴺ (1 ᴺ′) ·ᴸ Vᴺ (coerceᴺ (⊆-# (suc# (0 ᴮ #ø))) (0 ᴺ′)))) ≡ ƛ (Vᴺ (0 ᴺ′) ·ᴸ Vᴬ (42 ᴬ))
 test₂ = ≡.refl
 
 {-
@@ -177,7 +178,7 @@ module β-redᴺ-tests where
   t1 = _
   t2 : test-β-redᴺ "(λx.x (λy. x) (λx. x)) (λx.x)" "(λx0. x0) (λx0. λx1. x1) (λx0. x0)"
   t2 = _
-  t3 : T(showTmøᴺ (β-redᴺ (0 ˢ) (ƛ (0 ᴮ) (V (0 ᴺ′) · (ƛ (1 ᴮ) (V₁ 0 {ø})) · idᴺ) · idᴺ))
+  t3 : T(showTmøᴺ (β-redᴺ (0 ˢ) (ƛ (0 ᴮ) (V (0 ᴺ′) ·ᴺ (ƛ (1 ᴮ) (V₁ 0 {ø})) ·ᴺ idᴺ) ·ᴺ idᴺ))
          ==ˢ "(λx0. x0) (λx0. λx1. x1) (λx0. x0)")
   t3 = _
 
