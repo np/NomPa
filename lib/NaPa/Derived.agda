@@ -31,7 +31,7 @@ SynAbs F α = F (α ↑1)
 
 FunAbs : (World → Set) → World → Set
 -- FunAbs F α = ∀ {β} k → (α +ᵂ k) ⊆ β → (F β → F β)
-FunAbs F = Shifted (F |→| F)
+FunAbs F = Shifted (F →° F)
 
 shiftFunAbs : ∀ {F} → Shift (FunAbs F) (FunAbs F)
 shiftFunAbs {_} {α} {β} k ⊆w f {γ} k' ⊆w'
@@ -231,7 +231,7 @@ TraverseA : (F G H : World → Set) → Set₁
 TraverseA F G H = ∀ {E} (E-app : Applicative E) → Traverse F (E ∘ G) (E ∘ H)
 
 Var : (World → Set) → Set
-Var F = Name |↦| F
+Var F = Name ↦° F
 
 Rename : (F G : World → Set) → Set
 Rename F G = ∀ {α β} → (Name α → Name β) → (F α → G β)
@@ -358,10 +358,10 @@ module SubstGen {F G} (V : Var G)
   substName : ∀ {α} → G α → (Name (α ↑1) → G α)
   substName t = subtractWithᴺ 1 t V
 
-  syn2fun : SynAbs F |↦| FunAbs G
+  syn2fun : SynAbs F ↦° FunAbs G
   syn2fun t k pf u = subst (subtractWithᴺ 1 u (V ∘ shiftName 0 k pf)) t
 
-fun2syn : ∀ {F} (V : Var F) → FunAbs F |↦| SynAbs F
+fun2syn : ∀ {F} (V : Var F) → FunAbs F ↦° SynAbs F
 fun2syn {F} V {α} f = f 1 ⊆-+1↑1 (V (0 ᴺ))
 
 {-
@@ -403,7 +403,7 @@ module αEquivalence {α β} where
   ... | _       | _       = false
 
   -- α-equivalence on pairs is just the conjunction
-  ×-αeq : ∀ {F G} → αEq↑ F → αEq↑ G → αEq↑ (F |×| G)
+  ×-αeq : ∀ {F G} → αEq↑ F → αEq↑ G → αEq↑ (F ×° G)
   ×-αeq αeqF αeqG k (x₁ , y₁) (x₂ , y₂) = αeqF k x₁ x₂ ∧ αeqG k y₁ y₂
 
   -- α-equivalence on abstraction is just incrementing `k`

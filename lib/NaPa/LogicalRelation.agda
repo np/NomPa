@@ -10,7 +10,8 @@ open import Data.Nat.Properties as Nat
 open import Data.Empty
 open import Data.Unit
 open import Data.Maybe.NP
-open import Data.Bool.NP hiding (_==_)
+open import Data.Bool.NP
+open import Data.Two renaming (✓-¬-not to T'¬'not)
 open import Data.Two.Logical
 open import Data.Sum.NP
 open import Data.Product.NP
@@ -20,6 +21,7 @@ open import Relation.Nullary
 open import Relation.Nullary.Decidable
 open import Relation.Binary.NP
 open import Relation.Binary.Logical
+open import Relation.Unary.NP using (Pred)
 open import Function
 open import Function.Equality as ⟶≡ using (_⟶_; _⟨$⟩_)
 open import Function.Injection.NP using (Injection; Injective; module
