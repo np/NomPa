@@ -20,6 +20,7 @@ open import Function
 open import Function.Equality using (_⟨$⟩_)
 open import Function.Equivalence as ⇔ using (_⇔_; equivalence; module Equivalence)
 import Relation.Binary.PropositionalEquality.NP as ≡
+open import Relation.Binary.PropositionalEquality.Param.Binary
 import Data.Nat.NP as ℕ
 open ℕ renaming (_==_ to _==ℕ_)
 import Data.Nat.Properties as ℕ
@@ -32,7 +33,7 @@ import NomPa.Derived
 
 module NomPa.Implem.LogicalRelation.Internals where
 
-open ≡ using (_≡_; _≢_; ⟦≡⟧)
+open ≡ using (_≡_; _≢_)
 open ≡.≡-Reasoning
 open NomPa.Implem.Internals
 open NomPa NomPa.Implem.nomPa using (worldSym; Nameø-elim; sucᴺ; sucᴺ↑)
@@ -436,7 +437,7 @@ postulate
 ⟦binderᴺ∘nameᴮ⟧ : (⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧
                    ⟨ bᵣ ∶ ⟦Binder⟧ ⟩⟦→⟧
                     ⟦≡⟧ ⟦Binder⟧ (⟦binderᴺ⟧ (bᵣ ⟦◅⟧ αᵣ) (⟦nameᴮ⟧ αᵣ bᵣ)) bᵣ) binderᴺ∘nameᴮ binderᴺ∘nameᴮ
-⟦binderᴺ∘nameᴮ⟧ αᵣ bᵣ = ≡.⟦refl⟧
+⟦binderᴺ∘nameᴮ⟧ αᵣ bᵣ = ⟦refl⟧
 
 ⟨_,_⟩⟦◅⟧_ : (b₁ b₂ : Binder) → ∀ {α₁ α₂} (αᵣ : ⟦World⟧ α₁ α₂) → ⟦World⟧ (b₁ ◅ α₁) (b₂ ◅ α₂)
 ⟨ b₁ , b₂ ⟩⟦◅⟧ αᵣ = _⟦◅⟧_ {b₁} {b₂} _ αᵣ

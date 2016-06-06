@@ -4,6 +4,7 @@ module NomPa.Record.LogicalRelation where
 open import NomPa.Record
 open import Relation.Binary.Logical
 open import Relation.Binary.PropositionalEquality.NP
+open import Relation.Binary.PropositionalEquality.Param.Binary
 open import Data.Two.Logical
 open import Data.Sum.NP
 open import Data.Sum.Logical
