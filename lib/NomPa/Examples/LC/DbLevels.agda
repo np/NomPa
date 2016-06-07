@@ -227,7 +227,7 @@ module EqTmᴸ where
   (t₁ · u₁) ==Tmᴸ (t₂ · u₂)  = t₁ ==Tmᴸ t₂ ∧ u₁ ==Tmᴸ u₂
   ƛ t₁      ==Tmᴸ ƛ t₂      = t₁ ==Tmᴸ t₂
   Let t₁ u₁ ==Tmᴸ Let t₂ u₂  = t₁ ==Tmᴸ t₂ ∧ u₁ ==Tmᴸ u₂
-  ` κ₁      ==Tmᴸ ` κ₂      = κ₁ ==ᶜ κ₂
+  (` κ₁)    ==Tmᴸ (` κ₂)    = κ₁ ==ᶜ κ₂
   _         ==Tmᴸ _         = false
 
 import      Category.Monad.Partiality.NP as Pa
@@ -240,6 +240,7 @@ module KAM where -- Krivine Abstract Machine
 
   Stack = List Tmø
 
+  infix 10 _★_
   _★_ : Tmø → Stack → Tmø ⊥
   (t · u)   ★ π        = t ★ (u ∷ π)                -- push
   (ƛ t)     ★ (u ∷ π)  = later (♯ (t [0≔ u ] ★ π)) -- grab
@@ -263,7 +264,7 @@ module Tmᴿ⇒Tmᴸ (Atm : Set) (_==ᴬ_ : (x y : Atm) → Bool) where
   ! : ∀ {α s} → Env s α → Tmᴿ → Tmᴸ s α
   ! Δ (V x) = V (trᴬ Δ x)
   ! Δ (ƛ bᴬ t) = ƛ (! (extEnv bᴬ Δ) t)
-  ! Δ (t · u) = ! Δ t · ! Δ u
+  ! Δ (t Tmᴿ.· u) = ! Δ t Tmᴸ.· ! Δ u
 
   conv : ∀ {α} k → (Atm → Name α) → (k ᴮ) # α → Tmᴿ → Tmᴸ (k ᴮ) α
   conv _ trˢ k# = ! (trˢ , k#)

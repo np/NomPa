@@ -4,6 +4,7 @@ module NomPa.Record.LogicalRelation where
 open import NomPa.Record
 open import Relation.Binary.Logical
 open import Relation.Binary.PropositionalEquality.NP
+open import Relation.Binary.PropositionalEquality.Param.Binary
 open import Data.Two.Logical
 open import Data.Sum.NP
 open import Data.Sum.Logical
@@ -143,15 +144,15 @@ record ⟦NomPa⟧ ℓ (nomPa₁ nomPa₂ : NomPa) : Set (L.suc ℓ) where
 
  -- From numbers to binders
  _⟦ᴮ⟧ : (⟦ℕ⟧ ⟦→⟧ ⟦Binder⟧) N₁._ᴮ N₂._ᴮ
- zero   ⟦ᴮ⟧ = ⟦zeroᴮ⟧
- suc nᵣ ⟦ᴮ⟧ = ⟦sucᴮ⟧ (nᵣ ⟦ᴮ⟧)
+ ⟦zero⟧   ⟦ᴮ⟧ = ⟦zeroᴮ⟧
+ ⟦suc⟧ nᵣ ⟦ᴮ⟧ = ⟦sucᴮ⟧ (nᵣ ⟦ᴮ⟧)
 
  -- From numbers to names
  _⟦ᴺ⟧ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟨ nᵣ ∶ ⟦ℕ⟧ ⟩⟦→⟧ ⟦Name⟧ ((nᵣ ⟦ᴮ⟧) ⟦◅⟧ αᵣ)) N₁._ᴺ N₂._ᴺ
  _⟦ᴺ⟧ αᵣ nᵣ = ⟦nameᴮ⟧ αᵣ (nᵣ ⟦ᴮ⟧)
 
  ⟦zeroᴺ⟧ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ (αᵣ ⟦↑1⟧)) N₁.zeroᴺ N₂.zeroᴺ
- ⟦zeroᴺ⟧ αᵣ = _⟦ᴺ⟧ (αᵣ ⟦+1⟧) zero
+ ⟦zeroᴺ⟧ αᵣ = _⟦ᴺ⟧ (αᵣ ⟦+1⟧) ⟦zero⟧
 
  ⟦exportᴺ⟧ : (∀⟨ bᵣ ∶ ⟦Binder⟧ ⟩⟦→⟧ ∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ (bᵣ ⟦◅⟧ αᵣ) ⟦→⟧ ⟦Name⟧ (bᵣ ⟦◅⟧ ⟦ø⟧) ⟦⊎⟧ ⟦Name⟧ αᵣ) N₁.exportᴺ N₂.exportᴺ
  ⟦exportᴺ⟧ bᵣ αᵣ xᵣ = ⟦maybe⟧ (⟦Name⟧ αᵣ) (⟦Name⟧ (bᵣ ⟦◅⟧ ⟦ø⟧) ⟦⊎⟧ ⟦Name⟧ αᵣ)

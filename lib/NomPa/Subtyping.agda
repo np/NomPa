@@ -7,7 +7,7 @@ open import Data.Nat as Nat renaming (_+_ to _+ℕ_ ; _∸_ to _-ℕ_ ;
 open import NomPa.Worlds
 open import Relation.Nullary
 open import Relation.Binary using (Transitive)
-open import Relation.Nullary.Decidable as Dec
+open import Relation.Nullary.Decidable
 open import Function
 open import Data.Empty
 open import Data.Bool
@@ -149,7 +149,7 @@ record ⊆-Symantics {World} (worldSym : WorldSymantics World)
   ⊆-+-↑ = ⊆-ctx-+↑ ⊆-refl
 
   module ⊆-Reasoning where
-    infix  2 _∎
+    infix  3 _∎
     infixr 2 _⊆⟨_⟩_
 
     _⊆⟨_⟩_ : ∀ α {β γ} → α ⊆ β → β ⊆ γ → α ⊆ γ
@@ -589,11 +589,11 @@ module Decidable (⊆-pack : ⊆-Pack listBoolWorlds) where
   dec⊆ : ∀ xs ys → Dec (xs ⊆ ys)
   dec⊆ []           ys           = yes ⊆-ø
   dec⊆ (true ∷ _)   []           = no (⊈-elim ↑1⊈ø)
-  dec⊆ (false ∷ xs) []           = Dec.map′ α⊆ø→α+1⊆ø α+1⊆ø→α⊆ø (dec⊆ xs [])
-  dec⊆ (true ∷ xs)  (true ∷ ys)  = Dec.map′ ⊆-cong-↑1 ⊆-↑1-inj (dec⊆ xs ys)
+  dec⊆ (false ∷ xs) []           = map′ α⊆ø→α+1⊆ø α+1⊆ø→α⊆ø (dec⊆ xs [])
+  dec⊆ (true ∷ xs)  (true ∷ ys)  = map′ ⊆-cong-↑1 ⊆-↑1-inj (dec⊆ xs ys)
   dec⊆ (true ∷ xs)  (false ∷ ys) = no (⊈-elim ↑1⊈+1)
-  dec⊆ (false ∷ xs) (true ∷ ys)  = Dec.map′ ⊆-ctx-+1↑1 ⊆-unctx-+1↑1 (dec⊆ xs ys)
-  dec⊆ (false ∷ xs) (false ∷ ys) = Dec.map′ ⊆-cong-+1 ⊆-+1-inj (dec⊆ xs ys)
+  dec⊆ (false ∷ xs) (true ∷ ys)  = map′ ⊆-ctx-+1↑1 ⊆-unctx-+1↑1 (dec⊆ xs ys)
+  dec⊆ (false ∷ xs) (false ∷ ys) = map′ ⊆-cong-+1 ⊆-+1-inj (dec⊆ xs ys)
 
 module Decidable⊆ where
   open Decidable ⊆ᵇ-pack public

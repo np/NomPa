@@ -87,6 +87,7 @@ Stack = List Frame
 module KAM where -- Krivine Abstract Machine
   -- slightly modified to have CBV primitives
 
+  infix 10 _★_
   _★_ : Tmᴮ → Stack → Tmᴮ ⊥
   (t · u)   ★ π           = t ★ (arg u ∷ π)            -- push
   (ƛ t)     ★ (arg u ∷ π) = later (♯ (t [0≔ u ] ★ π)) -- grab
@@ -109,6 +110,7 @@ module KAM where -- Krivine Abstract Machine
 -- CBV semantics
 module AAM where -- Another Abstract Machine
 
+  infix 10 _★_
   _★_ : Tmᴮ → Stack → Tmᴮ ⊥
   (t · u)   ★ π            = u ★ (fct t ∷ π)
   (ƛ t)     ★ (arg u ∷ π)  = later (♯ (t [0≔ u ] ★ π))

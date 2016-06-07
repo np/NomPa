@@ -69,7 +69,7 @@ module IdentityExample where
   idτ : Ty ø
   idτ = ∀⟨ A ⟩ ⟨ xˢ ∶ V′ A ⟩⇒ V′ A
 
-  idτ∶★′ : ε ,, A# ∶ ` ★ ⊢ ⟨ xˢ ∶ V′ A ⟩⇒ V′ A ∶ ` ★
+  idτ∶★′ : ε ,, A# ∶ (` ★) ⊢ ⟨ xˢ ∶ V′ A ⟩⇒ V′ A ∶ (` ★)
   idτ∶★′ = Π⟨ x# ∶ V here ⟩⟨ `→` ⟩ (V (there' here))
 
   idτ∶★ : ε ⊢ idτ ∶ ` ★

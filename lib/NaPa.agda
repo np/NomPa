@@ -9,7 +9,7 @@ open ≡ using (_≡_; _≢_; _≗_; module ≗-Reasoning; module ≡-Reasoning)
 open import Data.Nat.NP as Nat using (ℕ; zero; suc; s≤s; z≤n; ≤-pred; pred; _<=_; module <=)
                             renaming (_+_ to _+ℕ_ ; _∸_ to _∸ℕ_ ; _==_ to _==ℕ_; ¬≤ to ¬≤ℕ;
                                       _<_ to _<ℕ_ ; _≤_ to _≤ℕ_; _≥_ to _≥ℕ_; _≤?_ to _≤?ℕ_)
-open import Data.Nat.Logical using (⟦ℕ⟧; zero; suc; ⟦ℕ⟧-setoid; ⟦ℕ⟧-equality; ⟦ℕ⟧-cong)
+open import Data.Nat.Logical using (⟦ℕ⟧; ⟦zero⟧; ⟦suc⟧; ⟦ℕ⟧-setoid; ⟦ℕ⟧-equality; ⟦ℕ⟧-cong)
                           renaming (_≟_ to _≟⟦ℕ⟧_)
 import Data.Nat.Properties as Nat
 open import Function
@@ -390,13 +390,13 @@ pred-shiftℕ-comm k x = ≡.refl
 
 .shift11-predᴺ?-comm :
   ∀ {α β} (pf : α +1 ⊆ β) (x : Name (α ↑1)) →
-  predᴺ? (shiftᴺ 1 1 pf x) ≡ coerceᴺ pf ∘ sucᴺ <$> predᴺ? x
+  predᴺ? (shiftᴺ 1 1 pf x) ≡ (coerceᴺ pf ∘ sucᴺ <$> predᴺ? x)
 shift11-predᴺ?-comm {α} pf x
    = <$>-injective₁ name-injective (≡.trans (helper (name x) {name∈α x} (suc (name x) ≤?ℕ 1)) (<$>-assoc (predᴺ? x)))
   where
     -- getting the name unpacked (and the Dec), works around an Agda bug in 2.2.8.
     .helper : ∀ n {pn : n ∈ α ↑1} → Dec (n <ℕ 1) → let x = n , pn in
-             name <$> (predᴺ? (shiftᴺ 1 1 pf x)) ≡ name ∘ (coerceᴺ pf ∘ sucᴺ) <$> predᴺ? x
+             (name <$> (predᴺ? (shiftᴺ 1 1 pf x))) ≡ (name ∘ (coerceᴺ pf ∘ sucᴺ) <$> predᴺ? x)
     helper zero    (no ¬p)         = ⊥-elim (¬p (s≤s z≤n))
     helper .0      (yes (s≤s z≤n)) = ≡.refl
     helper (suc _) (no _)          = ≡.refl

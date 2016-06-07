@@ -53,7 +53,7 @@ _◅★′_ : List Binder → World → World
 (b ∷ bs) ◅★′ α = bs ◅★′ (b ◅ α)
 
 module ⊆-Reasoning where
-  infix  2 _∎
+  infix  3 _∎
   infixr 2 _⊆⟨_⟩_
 
   _⊆⟨_⟩_ : ∀ α {β γ} → α ⊆ β → β ⊆ γ → α ⊆ γ

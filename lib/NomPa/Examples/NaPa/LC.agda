@@ -227,6 +227,7 @@ module KAM where -- Krivine Abstract Machine
 
   Tmø = Tmᴰ ø
 
+  infix 10 _★_
   _★_ : Tmø → Stack → Tmø ⊥
   (t · u)   ★ π           = t ★ (arg u ∷ π)            -- push
   (ƛ t)     ★ (arg u ∷ π) = later (♯ (t [0≔ u ] ★ π)) -- grab
@@ -250,6 +251,7 @@ module AAM where -- Another Abstract Machine
 
   Tmø = Tmᴰ ø
 
+  infix 10 _★_
   _★_ : Tmø → Stack → Tmø ⊥
   (t · u)   ★ π            = u ★ (fct t ∷ π)
   (ƛ t)     ★ (arg u ∷ π)  = later (♯ (t [0≔ u ] ★ π))
