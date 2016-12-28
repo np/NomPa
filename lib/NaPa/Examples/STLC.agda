@@ -12,7 +12,7 @@ open import Category.Monad renaming (RawMonad to Monad; module RawMonad to Monad
 open import Coinduction
 open import Function.NP
 open import Relation.Binary
-open import Relation.Binary.PropositionalEquality as ≡
+open import Relation.Binary.PropositionalEquality as ≡ hiding ([_])
 open        ≡ using (_≡_)
 open import Function.Equivalence using (equivalence; _⇔_)
 open import Relation.Nullary
@@ -38,7 +38,7 @@ data Constant : Set where
 
 module DataTm {ℓ} (kit : DataKit {ℓ}) where
   open DataKit kit
-  infixl 4 _·_
+  infixl 6 _·_
   data Tm α : Set ℓ where
     V    : (x : Name α) → Tm α
     _·_  : (t u : Tm α) → Tm α
@@ -473,14 +473,13 @@ module SmallStep where
     val? _        = false
 
     split : ∀ {α} → Tm α → CTm α
-    split t0 with t0
-    ... | t · u    =  if val? u then
-                        if val? t then hole t0
-                        else cmap (flip _·₁_ u) (split t)
-                      else cmap (_·₂_ t) (split u)
-    ... | Let t u  =  if val? t then hole t0
-                      else cmap (λ y → Let₁ y u) (split t)
-    ... | _        =  hole t0
+    split t0@(t · u)    = if val? u then
+                          if val? t then hole t0
+                          else cmap (flip _·₁_ u) (split t)
+                          else cmap (_·₂_ t) (split u)
+    split t0@(Let t u)  = if val? t then hole t0
+                          else cmap (λ y → Let₁ y u) (split t)
+    split t0            = hole t0
 
     ℕFix : ∀ {A : Set} → ℕ → (A → A) → (A → A)
     ℕFix zero     _  = id
@@ -500,11 +499,13 @@ module SmallStep where
 
     open Reducer split val? red public
 
+    {-
     module Examples where
       open TermExamples
       open Check 10
       ex₁ : appTm ι ι · idTm (ι ⟶ ι) · idTm ι ↝★ idTm ι
       ex₁ = ≡.refl
+    -}
 
 module Typing (cenv : CEnvPack L.zero) where
   open Monad (Maybe.monad {L.zero})

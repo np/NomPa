@@ -3,7 +3,7 @@ open import Data.List
 module NomPa.Examples.Raw where
 
 module DataType (Atom : Set) where
-  infixl 4 _·_
+  infixl 6 _·_
   data Tmᴿ : Set where
     V : (x : Atom) → Tmᴿ
     ƛ : (b : Atom) (t : Tmᴿ) → Tmᴿ
@@ -21,7 +21,6 @@ open import Relation.Nullary
 Rel₀ : Set → Set₁
 Rel₀ A = A → A → Set
 
-{-
 module RelTm (Atom : Set) (_≡ᴬ_ : Rel₀ Atom) where
   open DataType Atom
 
@@ -40,7 +39,6 @@ module RelTm (Atom : Set) (_≡ᴬ_ : Rel₀ Atom) where
 
   _≡™_ : Rel₀ Tmᴿ
   _≡™_ = _⊢_≈_ _≡ᴬ_
--}
 
 module ΔTm (Atom : Set) (_≡ᴬ_ : Rel₀ Atom) where
   open DataType Atom

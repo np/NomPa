@@ -195,9 +195,13 @@ test-β-redᴸ s {s-ok} s′ = T(showTmᴸ (β-redᴸ (0 ᴮ #ø) (parseTmᴸø 
 module β-redᴸ-tests where
   t1 : test-β-redᴸ "(λx.x (λy. x) (λx. x)) (λx.x)" "(λx0. x0) (λx0. λx1. x1) (λx0. x0)"
   t1 = _
-{-
-  t2 : test-β-redᴸ "λλ" "λy.λz.(λx.y x x z) (λx.x y z)" "λx0. λx1. x0 (λx2. x2 x0 x1) (λx2. x2 x0 x1) x1"
-  t2 = ≡.refl
-  t3 : test-β-redᴸ "λλλ" "λx.λy.λz.(λx.x (λy.λz. x)) y" "λx0. λx1. λx2. x1 (λx3. λx4. x1)"
-  t3 = ≡.refl
--}
+  {-
+  t2 : test-β-redᴸ "λy.λz.(λx.y x x z) (λx.x y z)" "λx0. λx1. x0 (λx2. x2 x0 x1) (λx2. x2 x0 x1) x1"
+  t2 = _
+  t3 : test-β-redᴸ "λx.λy.λz.(λx.x (λy.λz. x)) y" "λx0. λx1. λx2. x1 (λx3. λx4. x1)"
+  t3 = _
+  -}
+-- -}
+-- -}
+-- -}
+-- -}

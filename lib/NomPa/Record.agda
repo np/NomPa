@@ -12,7 +12,7 @@ open import Relation.Nullary using (¬_)
 open import Relation.Binary  using (Reflexive; Transitive)
 open import Relation.Binary.PropositionalEquality using (_≡_)
 open import NomPa.Worlds
-open import NomPa.Subtyping using (module ⊆-Symantics; ⊆-Symantics)
+open import NomPa.Subtyping using (⊆-Symantics)
 
 _^ⁿ_ : ∀ {a} {A : Set a} → (A → A) → ℕ → (A → A)
 f ^ⁿ 0     = id

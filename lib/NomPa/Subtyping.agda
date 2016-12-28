@@ -15,7 +15,11 @@ open import Data.List
 open ListBoolWorlds using (listBoolWorlds)
 
 record MinimalSymantics {World} (worldSym : WorldSymantics World)
-                        (_⊆_ : (α β : World) → Set) : Set where
+                        (Rel : (α β : World) → Set) : Set where
+  private
+    infix 4 _⊆_
+    _⊆_ : (α β : World) → Set
+    _⊆_ = Rel
   open WorldSymantics worldSym
   field
     ⊆-ø : ∀ {α} → ø ⊆ α

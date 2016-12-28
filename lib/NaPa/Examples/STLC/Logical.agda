@@ -1,7 +1,7 @@
 {-# OPTIONS --universe-polymorphism #-}
 module NaPa.Examples.STLC.Logical where
 
-open import Level
+open import Level hiding (suc)
 open import Data.Product.NP
 open import Data.Nat.NP as ℕ using (ℕ; zero; suc; _+_; _∸_) renaming (_≟_ to _≟ℕ_; module == to ==ℕ)
 open import Data.Bool
@@ -98,7 +98,7 @@ private
   module ==ℕs = Setoid ==ℕ.setoid
   module ℕe = Equality ⟦ℕ⟧-equality
 
-
+-- This is unfinished, see the postulate...
 module Foo where
 {-
 module Foo  (⟦World⟧ : ⟦Set₀⟧ World World)
@@ -141,8 +141,7 @@ module Foo  (⟦World⟧ : ⟦Set₀⟧ World World)
      suc (k₂ +ℕ name x₂)
    ∎ where open ⟦ℕ⟧-Reasoning
 -}
-  ext : ∀ {A B : Set} {f g : A → B} → (∀ x → f x ≡ g x) → f ≡ g
-  ext = {!!}
+  postulate ext : ∀ {A B : Set} {f g : A → B} → (∀ x → f x ≡ g x) → f ≡ g
 
   bar′ : ∀ k {α₁ α₂} (αᵣ : ⟦World⟧ α₁ α₂) x
         → (αᵣ ⟦↑ (ℕs.refl {k}) ⟧) ⟦$⟧ x ≡ protect↑ k (_⟦$⟧_ αᵣ) x
@@ -183,8 +182,7 @@ module Foo  (⟦World⟧ : ⟦Set₀⟧ World World)
         → ⟦Tm⟧ αᵣ t₁ t₂ → Tm≡ ≡.refl (mapTm 0 (_⟦$⟧_ αᵣ) t₁) t₂
   foo0 = foo 0
 
-  Tm≡⇒≡ : ∀ {α} → Tm≡ {α} ≡.refl ⇒ _≡_
-  Tm≡⇒≡ = {!!}
+  postulate Tm≡⇒≡ : ∀ {α} → Tm≡ {α} ≡.refl ⇒ _≡_
 
   ≡⇒Tm≡ : ∀ {α} → _≡_ ⇒ Tm≡ {α} ≡.refl
   -- ≡⇒Tm≡ ≡.refl = Refl.⟦Tm⟧-refl ≡.refl ℕe.refl

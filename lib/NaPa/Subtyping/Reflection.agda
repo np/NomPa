@@ -1,9 +1,3 @@
-open import Data.Product
-open import Data.List
-open import Data.Vec
-open import Data.Nat
-open import Reflection.NP
-open import Reflection.Decoding
 open import NaPa.Worlds
 open import NaPa.Subtyping
 
@@ -11,7 +5,14 @@ module NaPa.Subtyping.Reflection {World} (Wsym : WorldSymantics World) where
 
 open WorldSymantics Wsym
 
-__ UNFINISHED __
+{- __ UNFINISHED __
+
+open import Data.Product
+open import Data.List
+open import Data.Vec
+open import Data.Nat
+open import Reflection.NP
+open import Reflection.Decoding
 
 er : ArgSpec
 er = explicit , relevant
@@ -45,3 +46,4 @@ module Test where
 
   `w : Tagged Term w
   `w = quoteGoal g in withTagged w decodeWorld g
+-}

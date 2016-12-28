@@ -80,6 +80,8 @@ data Tel α : World → Set where
               (Γ : Tel (b ◅ α) β)
             → Tel α β
 
+infixl 5 _,,_∶_
+
 data Cx α : World → Set where
   ε      : Cx α α
   _,,_∶_ : ∀ {β b}

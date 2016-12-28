@@ -1,5 +1,3 @@
-{-# OPTIONS --universe-polymorphism #-}
--- vim: iskeyword=a-z,A-Z,48-57,-,+,',#,/,~,],[,=,_,`,⊆
 module NaPa where
 
 import Level as L

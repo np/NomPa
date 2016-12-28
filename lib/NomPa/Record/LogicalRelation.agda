@@ -140,19 +140,17 @@ record ⟦NomPa⟧ ℓ (nomPa₁ nomPa₂ : NomPa) : Set (L.suc ℓ) where
                       ⟦≡⟧ ⟦Binder⟧ (⟦binderᴺ⟧ (bᵣ ⟦◅⟧ αᵣ) (⟦nameᴮ⟧ αᵣ bᵣ)) bᵣ)
                       N₁.binderᴺ∘nameᴮ N₂.binderᴺ∘nameᴮ
 
- infix 100 _⟦ᴺ⟧ _⟦ᴮ⟧
-
  -- From numbers to binders
- _⟦ᴮ⟧ : (⟦ℕ⟧ ⟦→⟧ ⟦Binder⟧) N₁._ᴮ N₂._ᴮ
- ⟦zero⟧   ⟦ᴮ⟧ = ⟦zeroᴮ⟧
- ⟦suc⟧ nᵣ ⟦ᴮ⟧ = ⟦sucᴮ⟧ (nᵣ ⟦ᴮ⟧)
+ ⟦_ᴮ⟧ : (⟦ℕ⟧ ⟦→⟧ ⟦Binder⟧) N₁._ᴮ N₂._ᴮ
+ ⟦ ⟦zero⟧   ᴮ⟧ = ⟦zeroᴮ⟧
+ ⟦ ⟦suc⟧ nᵣ ᴮ⟧ = ⟦sucᴮ⟧ ⟦ nᵣ ᴮ⟧
 
  -- From numbers to names
- _⟦ᴺ⟧ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟨ nᵣ ∶ ⟦ℕ⟧ ⟩⟦→⟧ ⟦Name⟧ ((nᵣ ⟦ᴮ⟧) ⟦◅⟧ αᵣ)) N₁._ᴺ N₂._ᴺ
- _⟦ᴺ⟧ αᵣ nᵣ = ⟦nameᴮ⟧ αᵣ (nᵣ ⟦ᴮ⟧)
+ ⟦_ᴺ⟧ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟨ nᵣ ∶ ⟦ℕ⟧ ⟩⟦→⟧ ⟦Name⟧ (⟦ nᵣ ᴮ⟧ ⟦◅⟧ αᵣ)) N₁._ᴺ N₂._ᴺ
+ ⟦_ᴺ⟧ αᵣ nᵣ = ⟦nameᴮ⟧ αᵣ ⟦ nᵣ ᴮ⟧
 
  ⟦zeroᴺ⟧ : (∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ (αᵣ ⟦↑1⟧)) N₁.zeroᴺ N₂.zeroᴺ
- ⟦zeroᴺ⟧ αᵣ = _⟦ᴺ⟧ (αᵣ ⟦+1⟧) ⟦zero⟧
+ ⟦zeroᴺ⟧ αᵣ = ⟦_ᴺ⟧ (αᵣ ⟦+1⟧) ⟦zero⟧
 
  ⟦exportᴺ⟧ : (∀⟨ bᵣ ∶ ⟦Binder⟧ ⟩⟦→⟧ ∀⟨ αᵣ ∶ ⟦World⟧ ⟩⟦→⟧ ⟦Name⟧ (bᵣ ⟦◅⟧ αᵣ) ⟦→⟧ ⟦Name⟧ (bᵣ ⟦◅⟧ ⟦ø⟧) ⟦⊎⟧ ⟦Name⟧ αᵣ) N₁.exportᴺ N₂.exportᴺ
  ⟦exportᴺ⟧ bᵣ αᵣ xᵣ = ⟦maybe⟧ (⟦Name⟧ αᵣ) (⟦Name⟧ (bᵣ ⟦◅⟧ ⟦ø⟧) ⟦⊎⟧ ⟦Name⟧ αᵣ)

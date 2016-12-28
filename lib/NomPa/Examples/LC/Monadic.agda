@@ -109,7 +109,7 @@ module Cont where
 {- with instance arguments
   unit : ∀ {α} ⦃ s : Supply α ⦄ → Tm α → Tm α
   unit ⦃ s ⦄ x = ƛ k (V′ k · x₁)
-   where x₁ = coerceTmˢ … x
+   where x₁ = coerceTmˢ it x
          k  = Supply.seedᴮ s
 
   bind : ∀ {α} ⦃ s : Supply α ⦄ → Tm α → Tm α → Tm α
@@ -123,14 +123,14 @@ module Cont where
 
   ap : ∀ {α} ⦃ s : Supply α ⦄ → Tm α → Tm α → Tm α
   ap ⦃ s ⦄ mf mx = bind mf (ƛ f
-                       (bind (coerceTmˢ … mx) (ƛ x
+                       (bind (coerceTmˢ it mx) (ƛ x
                           (unit (fT · xT)))))
     where 1+s = sucˢ s
           2+s = sucˢ 1+s
 
           f = Supply.seedᴮ s
           x = Supply.seedᴮ (sucˢ s)
-          fT = coerceTmˢ … (V′ f)
+          fT = coerceTmˢ it (V′ f)
           xT = V′ x
 -}
   run : ∀ {α} → Tm α → Tm α

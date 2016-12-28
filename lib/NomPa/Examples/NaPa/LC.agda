@@ -29,7 +29,7 @@ open NomPa.Derived nomPa
 open NomPa.Derived.NaPa nomPa
 open Data.Indexed {_} {World}
 
-infixl 4 _·_
+infixl 6 _·_
 data Tmᴰ α : Set where
   V   : (a : Name α) → Tmᴰ α
   ƛ   : (t : Tmᴰ (α ↑1)) → Tmᴰ α

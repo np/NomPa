@@ -222,12 +222,13 @@ module CmpTmᴸ where
   _==Tmᴸ_ = cmpTmᴸ _==ᴺ_
 
 module EqTmᴸ where
+  infix 4 _==Tmᴸ_
   _==Tmᴸ_ : ∀ {α s} → Tmᴸ s α → Tmᴸ s α → Bool
   V x₁      ==Tmᴸ V x₂      = x₁ ==ᴺ x₂
-  (t₁ · u₁) ==Tmᴸ (t₂ · u₂)  = t₁ ==Tmᴸ t₂ ∧ u₁ ==Tmᴸ u₂
+  (t₁ · u₁) ==Tmᴸ (t₂ · u₂) = (t₁ ==Tmᴸ t₂) ∧ (u₁ ==Tmᴸ u₂)
   ƛ t₁      ==Tmᴸ ƛ t₂      = t₁ ==Tmᴸ t₂
-  Let t₁ u₁ ==Tmᴸ Let t₂ u₂  = t₁ ==Tmᴸ t₂ ∧ u₁ ==Tmᴸ u₂
-  (` κ₁)    ==Tmᴸ (` κ₂)    = κ₁ ==ᶜ κ₂
+  Let t₁ u₁ ==Tmᴸ Let t₂ u₂ = (t₁ ==Tmᴸ t₂) ∧ (u₁ ==Tmᴸ u₂)
+  ` κ₁      ==Tmᴸ ` κ₂      = κ₁ ==ᶜ κ₂
   _         ==Tmᴸ _         = false
 
 import      Category.Monad.Partiality.NP as Pa

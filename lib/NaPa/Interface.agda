@@ -9,8 +9,8 @@ open import Data.Unit using (⊤)
 open import Data.Fin using (Fin; zero; suc)
 open import Data.Sum
 open import Data.Bool
-open import NaPa.Worlds
-open import NaPa.Subtyping
+open import NomPa.Worlds
+open import NomPa.Subtyping
 open import Relation.Nullary
 
 record DataKit {ℓ} : Set (L.suc ℓ) where
@@ -19,6 +19,7 @@ record DataKit {ℓ} : Set (L.suc ℓ) where
     {World} : Set ℓ
     Name    : World → Set
     _↑1     : World → World
+  infix 10 _↑1
 
 rawKit : DataKit
 rawKit = mkKit {World = ⊤} (const ℕ) _

@@ -16,7 +16,7 @@ open NomPa.Examples.Raw.StringTerm
 
 module NomPa.Examples.BareDB where
 
-infixl 4 _·_
+infixl 6 _·_
 data Tmᴮ : Set where
   V : (x : ℕ) → Tmᴮ
   ƛ : (t : Tmᴮ) → Tmᴮ

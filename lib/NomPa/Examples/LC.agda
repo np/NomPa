@@ -315,6 +315,8 @@ module KAM where -- Krivine Abstract Machine
 
   Stack = List (Tm ø)
 
+  infix 10 _★_
+
   _★_ : Tm ø → Stack → (Tm ø)⊥
   (t · u)     ★ π        = t ★ (u ∷ π)                   -- push
   (ƛ b t)     ★ (u ∷ π)  = later (♯ (substøᴮTm b u t ★ π)) -- grab

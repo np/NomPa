@@ -11,7 +11,7 @@ open import Relation.Nullary  using (¬_)
 open import Relation.Binary.PropositionalEquality as ≡
 
 record WorldSymantics (W : Set) : Set where
-  infix 21 _↑1 _+1
+  infix 21 _↑1 _+1 _^1
   field
     ø : W
     _↑1 _+1 : (α : W) → W
@@ -66,7 +66,7 @@ module WorldOps {World} (Wsym : WorldSymantics World) where
 -}
 
 module ListBoolSpecialized where
-  infixl 6 _↑_
+  infixl 6 _↑_ _+ᵂ_
 
   World : Set
   World = List Bool

@@ -78,13 +78,13 @@ module ApplicativeSyms {M Repr : Set → Set} (M-app : Applicative M) where
   instance
     baseArithSym : {{sym : BaseArithSym Repr}} → BaseArithSym (M ∘ Repr)
     baseArithSym = record { nat = pure ∘ nat; add = pure add; mul = pure mul } where
-      open BaseArithSym _ …
+      open BaseArithSym it
 
   appSym : {{sym : AppSym Repr}} → AppSym (M ∘ Repr)
   appSym {{mk appSym'}} = mk λ x y → pure appSym' ⊛ x ⊛ y
 
   simpleSym : {{sym : SimpleSym Repr}} → SimpleSym (M ∘ Repr)
-  simpleSym {{mk _ _}} = mk … appSym
+  simpleSym {{mk ba app}} = mk (baseArithSym {{ba}}) (appSym {{app}})
 
   assertPos : {{_ : AssertPos Repr}} → AssertPos (M ∘ Repr)
   assertPos {{assertPos′}} nᴹ aᴹ = pure assertPos′ ⊛ nᴹ ⊛ aᴹ
@@ -129,18 +129,18 @@ module M2
   -- (_↑1 : Env → Env)
   (Binder : Set)
   (Ty : Set)
-  (_,⟨_∶_⟩ : Env → Binder → Ty → Env)
+  (⟨_,_∶_⟩ : Env → Binder → Ty → Env)
   (_#_ : Binder → Env → Set)
-  (_↑1⟨_⟩ : Env → Ty → Env)
+  (⟨_⟩↑1⟨_⟩ : Env → Ty → Env)
   (_⊆_ : Env → Env → Set)
   (_⇒_ : Ty → Ty → Ty)
   (ε : Env)
   (⊆-ε     : ∀ {Γ} → ε ⊆ Γ)
-  (⊆-# : ∀ {Γ b τ} → b # Γ → Γ ⊆ Γ ,⟨ b ∶ τ ⟩)
-  (⊆-cong-,ᴰ : ∀ {Γ₁ Γ₂ τ} → Γ₁ ⊆ Γ₂ → Γ₁ ↑1⟨ τ ⟩ ⊆ Γ₂ ↑1⟨ τ ⟩)
+  (⊆-# : ∀ {Γ b τ} → b # Γ → Γ ⊆ ⟨ Γ , b ∶ τ ⟩)
+  (⊆-cong-,ᴰ : ∀ {Γ₁ Γ₂ τ} → Γ₁ ⊆ Γ₂ → ⟨ Γ₁ ⟩↑1⟨ τ ⟩ ⊆ ⟨ Γ₂ ⟩↑1⟨ τ ⟩)
   (⊆-trans : Transitive _⊆_)
   (_+1 : Env → Env)
-  (⊆-+1↑1 : ∀ {Γ τ} → Γ +1 ⊆ Γ ↑1⟨ τ ⟩)
+  (⊆-+1↑1 : ∀ {Γ τ} → (Γ +1) ⊆ ⟨ Γ ⟩↑1⟨ τ ⟩)
   (_⊢_ : Env → Ty → Set) where
 
  record Sym : Set where
@@ -148,17 +148,17 @@ module M2
 
   field
    _·_  : ∀ {Γ σ τ} → (t : Γ ⊢ (σ ⇒ τ)) (u : Γ ⊢ σ) → Γ ⊢ τ
-   ƛᴺ    : ∀ {Γ σ τ} → (f : ∀ {b} → b # Γ → Γ ,⟨ b ∶ σ ⟩ ⊢ σ → Γ ,⟨ b ∶ σ ⟩ ⊢ τ) → Γ ⊢ (σ ⇒ τ)
-   ƛᴰ    : ∀ {Γ σ τ} → (f : Γ ↑1⟨ σ ⟩ ⊢ σ → Γ ↑1⟨ σ ⟩ ⊢ τ) → Γ ⊢ (σ ⇒ τ)
+   ƛᴺ    : ∀ {Γ σ τ} → (f : ∀ {b} → b # Γ → ⟨ Γ , b ∶ σ ⟩ ⊢ σ → ⟨ Γ , b ∶ σ ⟩ ⊢ τ) → Γ ⊢ (σ ⇒ τ)
+   ƛᴰ    : ∀ {Γ σ τ} → (f : ⟨ Γ ⟩↑1⟨ σ ⟩ ⊢ σ → ⟨ Γ ⟩↑1⟨ σ ⟩ ⊢ τ) → Γ ⊢ (σ ⇒ τ)
    -- Let  : ∀ {α} → (t : Tm α) (u : Tm (α ↑1) → Tm (α ↑1)) → Tm α
    -- ƛ    : ∀ {α} → (t : ∀ {b} → Tm (b ◅ α) → Tm (b ◅ α)) → Tm α
    -- Let  : ∀ {α} → (t : Tm α) (u : ∀ {b} → Tm (b ◅ α) → Tm (b ◅ α)) → Tm α
    -- `_   : ∀ {α} → (κ : Cst) → Tm α
 
    coerce™ : ∀ {Γ₁ Γ₂ τ} → Γ₁ ⊆ Γ₂ → Γ₁ ⊢ τ → Γ₂ ⊢ τ
-   shift™ : ∀ {Γ₁ Γ₂ τ} → Γ₁ +1 ⊆ Γ₂ → Γ₁ ⊢ τ → Γ₂ ⊢ τ
+   shift™ : ∀ {Γ₁ Γ₂ τ} → (Γ₁ +1) ⊆ Γ₂ → Γ₁ ⊢ τ → Γ₂ ⊢ τ
 
-  weaken™ : ∀ {Γ σ τ} → Γ ⊢ τ → Γ ↑1⟨ σ ⟩ ⊢ τ
+  weaken™ : ∀ {Γ σ τ} → Γ ⊢ τ → ⟨ Γ ⟩↑1⟨ σ ⟩ ⊢ τ
   weaken™ = shift™ ⊆-+1↑1
 
 
@@ -201,8 +201,8 @@ module M3 where
     field
       ha : Repr A
 
-  href : ∀ {Repr S A H} → HV (HA Repr S A × H) Repr A 
-  href (mk x , h) = x 
+  href : ∀ {Repr S A H} → HV (HA Repr S A × H) Repr A
+  href (mk x , h) = x
 
   -- dup
   LamM : Set₁
@@ -212,14 +212,14 @@ module M3 where
 
   lam : LamM
   lam {{M-fun}} {{sym}} {{mk ƛᴾ}} f = _<$>_ (λ body h → ƛᴾ (λ x → body (mk x , h))) (f {⊤} href) where
-    open SimpleSym _ sym
+    open SimpleSym sym
     open Functor M-fun
 
   var : ∀ {H M Repr A} {{M-app : Applicative M}} → HV H Repr A → M (HV H Repr A)
-  var = Applicative.pure …
+  var = Applicative.pure it
 
   weaken : ∀ {H H′ A : Set} {M Repr : Set → Set} {{M-app : Functor M}} → M (HV H Repr A) → M (HV (H′ × H) Repr A)
-  weaken = Functor._<$>_ … (λ g → g ∘ snd) -- hmap goes yellow
+  weaken = Functor._<$>_ it (λ g → g ∘ snd) -- hmap goes yellow
 
   lib : Lib
   lib = mk HA lam href
